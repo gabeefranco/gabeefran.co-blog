@@ -1,0 +1,67 @@
+---
+import PostCard from './PostCard.astro';
+import { getPostsByLang } from '../lib/posts';
+import { getLocalizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const posts = await getPostsByLang(lang);
+const recentPosts = posts.slice(0, 3);
+const postsHref = getLocalizedPath('/posts', lang);
+const aboutHref = getLocalizedPath('/about', lang);
+---
+
+<section class="mx-auto max-w-3xl px-4 pb-4 pt-14 sm:px-6 sm:pt-20">
+  <div class="flex flex-col items-start gap-8 sm:flex-row sm:items-center">
+    <img
+      src="/logo.png"
+      alt=""
+      width="867"
+      height="458"
+      class="w-40 shrink-0 drop-shadow-sm sm:w-52"
+    />
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary">{t('hero.kicker')}</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight text-text sm:text-4xl">{t('hero.title')}</h1>
+      <p class="mt-4 max-w-xl text-lg leading-relaxed text-text-muted">{t('hero.subtitle')}</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a
+          href={postsHref}
+          class="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+        >
+          {t('hero.cta.posts')}
+        </a>
+        <a
+          href={aboutHref}
+          class="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:border-primary hover:text-primary"
+        >
+          {t('hero.cta.about')}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+  <div class="flex items-baseline justify-between gap-4">
+    <div>
+      <h2 class="text-xl font-semibold text-text">{t('home.recent')}</h2>
+      <p class="mt-1 text-sm text-text-muted">{t('home.recent.subtitle')}</p>
+    </div>
+    <a href={postsHref} class="shrink-0 text-sm font-medium text-primary hover:underline">
+      {t('home.viewAll')} &rarr;
+    </a>
+  </div>
+
+  {recentPosts.length > 0 ? (
+    <div class="mt-6">
+      {recentPosts.map((post) => <PostCard post={post} lang={lang} />)}
+    </div>
+  ) : (
+    <p class="mt-6 text-text-muted">{t('posts.empty')}</p>
+  )}
+</section>

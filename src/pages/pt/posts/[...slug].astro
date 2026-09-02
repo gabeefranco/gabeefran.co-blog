@@ -1,0 +1,22 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostLayout from '../../../layouts/PostLayout.astro';
+import ObservationCard from '../../../components/ObservationCard';
+import { getPostsByLang, slugOf, estimateReadingMinutes } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPostsByLang('pt');
+  return posts.map((post) => ({ params: { slug: slugOf(post) }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const readingMinutes = estimateReadingMinutes(post.body ?? '');
+---
+
+<BaseLayout title={`${post.data.title} — gabeefranco`} description={post.data.description} lang="pt">
+  <PostLayout post={post} lang="pt" readingMinutes={readingMinutes}>
+    <Content components={{ ObservationCard }} />
+  </PostLayout>
+</BaseLayout>

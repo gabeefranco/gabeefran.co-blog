@@ -1,0 +1,41 @@
+---
+import PostCard from './PostCard.astro';
+import { getPostsByLang } from '../lib/posts';
+import { getLocalizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  tag?: string;
+}
+
+const { lang, tag } = Astro.props;
+const t = useTranslations(lang);
+const allPosts = await getPostsByLang(lang);
+const posts = tag ? allPosts.filter((p) => p.data.tags.includes(tag)) : allPosts;
+const postsHref = getLocalizedPath('/posts', lang);
+---
+
+<section class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+  {tag ? (
+    <>
+      <p class="text-sm font-medium text-text-muted">{t('posts.filteredBy')}</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight text-text">#{tag}</h1>
+      <a href={postsHref} class="mt-2 inline-block text-sm font-medium text-primary hover:underline">
+        {t('posts.clearFilter')}
+      </a>
+    </>
+  ) : (
+    <>
+      <h1 class="text-3xl font-bold tracking-tight text-text">{t('posts.title')}</h1>
+      <p class="mt-2 text-text-muted">{t('posts.subtitle')}</p>
+    </>
+  )}
+
+  {posts.length > 0 ? (
+    <div class="mt-8">
+      {posts.map((post) => <PostCard post={post} lang={lang} />)}
+    </div>
+  ) : (
+    <p class="mt-8 text-text-muted">{t('posts.empty')}</p>
+  )}
+</section>

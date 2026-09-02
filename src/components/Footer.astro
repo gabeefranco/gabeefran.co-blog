@@ -1,0 +1,38 @@
+---
+import { useTranslations, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-border/80">
+  <div class="mx-auto flex max-w-3xl flex-col gap-2 px-4 py-8 text-sm text-text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <p>
+      &copy; {year} <span class="font-mono text-text">gabeefranco</span> &middot; {t('footer.rights')}
+    </p>
+    <div class="flex items-center gap-4">
+      <span class="hidden sm:inline">{t('footer.tagline')}</span>
+      <a
+        href="https://github.com/gabeefranco"
+        target="_blank"
+        rel="noopener noreferrer me"
+        class="transition-colors hover:text-primary"
+      >
+        GitHub
+      </a>
+      <a
+        href="https://github.com/gabeefranco/gabeefran.co-blog"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="transition-colors hover:text-primary"
+      >
+        {t('footer.source')}
+      </a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,38 @@
+---
+import type { PostEntry } from '../lib/posts';
+import { slugOf, formatDate } from '../lib/posts';
+import { getLocalizedPath, type Lang } from '../lib/i18n';
+
+interface Props {
+  post: PostEntry;
+  lang: Lang;
+}
+
+const { post, lang } = Astro.props;
+const href = getLocalizedPath(`/posts/${slugOf(post)}`, lang);
+const tagsHref = (tag: string) => getLocalizedPath(`/tags/${tag}`, lang);
+---
+
+<article class="group border-b border-border py-6 first:pt-0 last:border-b-0">
+  <a href={href} class="block">
+    <time datetime={post.data.pubDate.toISOString()} class="text-xs font-medium uppercase tracking-wide text-text-muted">
+      {formatDate(post.data.pubDate, lang)}
+    </time>
+    <h3 class="mt-1.5 text-xl font-semibold text-text transition-colors group-hover:text-primary">
+      {post.data.title}
+    </h3>
+    <p class="mt-1.5 text-[15px] leading-relaxed text-text-muted">{post.data.description}</p>
+  </a>
+  {post.data.tags.length > 0 && (
+    <div class="mt-3 flex flex-wrap gap-2">
+      {post.data.tags.map((tag) => (
+        <a
+          href={tagsHref(tag)}
+          class="rounded-full bg-surface-alt px-2.5 py-1 text-xs font-medium text-text-muted transition-colors hover:bg-accent/15 hover:text-accent"
+        >
+          #{tag}
+        </a>
+      ))}
+    </div>
+  )}
+</article>

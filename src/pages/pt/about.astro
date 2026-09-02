@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../lib/i18n';
+
+const t = useTranslations('pt');
+const description =
+  'Gabriel Franco (gabeefranco): estudante de ciência da computação na PUCRS, interessado em como o software realmente funciona e na história do movimento open source.';
+---
+
+<BaseLayout title={`${t('about.title')} — ${t('site.name')}`} description={description} lang="pt">
+  <section class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+    <h1 class="text-3xl font-bold tracking-tight text-text sm:text-4xl">{t('about.title')}</h1>
+
+    <div class="prose prose-neutral mt-6 max-w-none prose-headings:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline dark:prose-invert">
+      <p>
+        Olá, eu sou o Gabe — Gabriel Franco. Sou estudante de ciência da computação na PUCRS
+        (Pontifícia Universidade Católica do Rio Grande do Sul), e este blog é onde registro as
+        coisas que vou aprendendo e pensando pelo caminho.
+      </p>
+      <p>
+        Eu me importo bastante com ciência da computação como área, não só como um conjunto de
+        ferramentas para lançar produtos. Tenho um jeito bem específico de fazer as coisas:
+        prefiro entender um sistema de verdade a decorar os passos para fazê-lo funcionar, e
+        costumo desacelerar de propósito para descobrir o que realmente está acontecendo por
+        baixo dos panos — em um compilador, em um sistema operacional, no runtime de uma
+        linguagem, seja lá o que for. Esse hábito molda a maior parte do que acaba virando post
+        aqui.
+      </p>
+      <p>
+        Também tenho um interesse genuíno pela história do movimento open source: as pessoas, os
+        debates e as decisões que moldaram o software do qual todos dependemos. Figuras como
+        Linus Torvalds e projetos como o GNU aparecem com frequência no que leio e escrevo, não
+        como curiosidade, mas porque entender de onde uma ferramenta veio costuma explicar
+        bastante sobre como e por que ela funciona do jeito que funciona hoje.
+      </p>
+      <p>
+        Este site é bilíngue, em inglês e em português, e todo post existe nos dois idiomas.
+        Obrigado pela visita.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

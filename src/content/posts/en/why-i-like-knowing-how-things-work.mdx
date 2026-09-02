@@ -1,0 +1,28 @@
+---
+title: "Why I insist on knowing how things work"
+description: "On the habit of digging past the abstraction, and why it's worth the extra time."
+pubDate: 2026-08-25
+tags: ["learning", "philosophy"]
+---
+
+import ObservationCard from '../../../components/ObservationCard';
+
+There's a moment that happens fairly often when I'm learning something new: a tool, a library, a framework works, I get the result I wanted, and I still don't feel done. Something in me needs to know *why* it worked before I can move on.
+
+This is slower. I'll admit that up front. You can ship things faster by treating a library as a black box, calling the documented function, and trusting it. Most of the time that's the correct engineering tradeoff, and I do it too when a deadline demands it.
+
+But left to my own devices, I go the other way. If a build tool does something unexpected, I'd rather read its source for ten minutes than paste the error into a search bar. If a language feature feels like magic, I want to know what it actually compiles or desugars to.
+
+<ObservationCard title="Observation">
+  This isn't really about distrust of abstractions — abstractions are how any of this scales at
+  all. It's that an abstraction I understand is one I can safely break when I need to, and one I
+  understand *badly* is where the weirdest, hardest-to-debug problems tend to live.
+</ObservationCard>
+
+## Where this comes from
+
+I'm studying computer science at PUCRS, and if there's one thing the coursework reinforces, it's that almost every "advanced" tool is built from a small number of ideas repeated and combined: state machines, trees, graphs, the fetch-decode-execute loop, layers of indirection stacked on layers of indirection. Once you've actually implemented a toy version of something — a shell, a tiny compiler, a basic scheduler — the "real" version stops looking like magic and starts looking like an engineering decision you can evaluate.
+
+That's part of why I find open source history so interesting too: it's the same instinct applied to systems instead of code. Knowing *why* GNU exists, or why Git was built the way it was, changes how I read a commit history or a mailing list thread. The tool stops being a given and becomes a decision someone made, for reasons, under constraints — which is exactly the kind of thing I want to understand before I trust it completely.
+
+I don't think this is a virtue in some abstract sense. It's just a very specific, very particular way of working that happens to suit me, and this blog is mostly a record of the digging.

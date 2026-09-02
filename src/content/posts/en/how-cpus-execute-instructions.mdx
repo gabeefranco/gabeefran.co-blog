@@ -1,0 +1,41 @@
+---
+title: "How a CPU actually executes an instruction"
+description: "Fetch, decode, execute: a plain-language walk through what your processor does billions of times per second."
+pubDate: 2026-03-18
+tags: ["computer-science", "systems"]
+---
+
+import ObservationCard from '../../../components/ObservationCard';
+
+When people say a CPU "runs code," what actually happens is a lot more mechanical — and a lot more satisfying to understand — than that phrase suggests. There's no magic. Just a very fast, very disciplined loop.
+
+## The loop: fetch, decode, execute
+
+At the bottom of almost everything your computer does is a cycle that repeats, conceptually, forever:
+
+1. **Fetch** — the CPU reads the next instruction from memory, at the address stored in the program counter (PC).
+2. **Decode** — control logic figures out what the instruction actually means: which operation, which registers, which addressing mode.
+3. **Execute** — the ALU (or another functional unit) performs the operation — an addition, a memory load, a branch.
+4. **Write back** — the result, if any, is stored somewhere: a register, or memory.
+5. The program counter updates, and the loop starts again.
+
+<ObservationCard title="Observation">
+  This is the textbook five-stage model (sometimes just three: fetch, decode, execute). Real
+  processors pipeline these stages so multiple instructions are in flight at once, and modern
+  chips go much further with out-of-order execution and speculation — but the mental model above
+  still holds for reasoning about correctness.
+</ObservationCard>
+
+## Why this matters even if you never write assembly
+
+You don't need to write machine code to benefit from understanding this loop. It explains, among other things:
+
+- Why branches (`if`, loops) are relatively expensive — the CPU has to figure out where to fetch from next, and a wrong guess (misprediction) means throwing away speculative work.
+- Why cache misses hurt so much — the fetch and memory-access stages stall waiting on DRAM, which is glacially slow compared to a clock cycle.
+- Why "the compiler optimized it away" is a real thing — the compiler is generating the instruction stream this loop consumes, and it's free to pick a completely different sequence as long as observable behavior matches.
+
+## Under the hood is not a black box
+
+The instruction set architecture (ISA) — x86-64, ARM, RISC-V — is the contract between software and hardware: a fixed vocabulary of operations the fetch/decode/execute loop knows how to handle. Everything above that — your language, your framework, your favorite abstraction — eventually compiles or interprets down into that vocabulary.
+
+Knowing this doesn't make you write faster code by itself. But it makes the rest of the stack stop feeling like magic, and that's usually where I start when I want to actually understand a system instead of just using it.

@@ -1,0 +1,99 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { getLocalizedPath, LANG_LABELS, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const otherLang: Lang = lang === 'en' ? 'pt' : 'en';
+
+const pathname = Astro.url.pathname;
+const homeHref = getLocalizedPath('/', lang);
+const postsHref = getLocalizedPath('/posts', lang);
+const aboutHref = getLocalizedPath('/about', lang);
+const langSwitchHref = getLocalizedPath(pathname, otherLang);
+
+const navLinks = [
+  { href: homeHref, label: t('nav.home') },
+  { href: postsHref, label: t('nav.posts') },
+  { href: aboutHref, label: t('nav.about') },
+];
+
+function isActive(href: string): boolean {
+  if (href === homeHref) return pathname === href;
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+---
+
+<header class="sticky top-0 z-40 border-b border-border/80 bg-bg/85 backdrop-blur">
+  <div class="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a href={homeHref} class="flex shrink-0 items-center gap-2.5" aria-label={t('site.name')}>
+      <img src="/favicon.svg" alt="" width="32" height="32" class="size-8" />
+      <span class="font-mono text-[15px] font-semibold tracking-tight text-text">{t('site.name')}</span>
+    </a>
+
+    <div class="flex items-center gap-2">
+      <nav class="hidden items-center gap-1 sm:flex" aria-label={t('nav.menu')}>
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class:list={[
+              'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+              isActive(link.href)
+                ? 'bg-primary/10 text-primary'
+                : 'text-text-muted hover:bg-surface-alt hover:text-text',
+            ]}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <a
+        href={langSwitchHref}
+        hreflang={otherLang}
+        title={t('lang.switch')}
+        aria-label={`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
+        class="grid size-9 shrink-0 place-items-center rounded-full border border-border text-xs font-bold uppercase text-text-muted transition-colors hover:border-primary hover:text-primary"
+      >
+        {otherLang}
+      </a>
+
+      <ThemeToggle lang={lang} />
+
+      <details class="relative sm:hidden">
+        <summary
+          class="grid size-9 cursor-pointer list-none place-items-center rounded-full border border-border text-text-muted transition-colors hover:border-primary hover:text-primary"
+          aria-label={t('nav.menu')}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="size-[18px]">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </summary>
+        <nav
+          class="absolute right-0 top-11 flex w-40 flex-col gap-1 rounded-xl border border-border bg-surface p-2 shadow-lg"
+          aria-label={t('nav.menu')}
+        >
+          {navLinks.map((link) => (
+            <a
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              class:list={[
+                'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                isActive(link.href)
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-text-muted hover:bg-surface-alt hover:text-text',
+              ]}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>

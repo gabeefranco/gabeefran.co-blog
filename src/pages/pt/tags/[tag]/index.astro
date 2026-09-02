@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PostsContent from '../../../../components/PostsContent.astro';
+import { getAllTags, getPostsByLang } from '../../../../lib/posts';
+import { useTranslations } from '../../../../lib/i18n';
+
+export async function getStaticPaths() {
+  const tags = await getAllTags('pt');
+  return tags.map((tag) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+const t = useTranslations('pt');
+const posts = (await getPostsByLang('pt')).filter((p) => p.data.tags.includes(tag!));
+---
+
+<BaseLayout
+  title={`#${tag} — ${t('site.name')}`}
+  description={`${t('posts.filteredBy')} #${tag}: ${posts.map((p) => p.data.title).join(', ')}`}
+  lang="pt"
+>
+  <PostsContent lang="pt" tag={tag} />
+</BaseLayout>

@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostsContent from '../../../components/PostsContent.astro';
+import { useTranslations } from '../../../lib/i18n';
+
+const t = useTranslations('pt');
+---
+
+<BaseLayout title={`${t('posts.title')} — ${t('site.name')}`} description={t('posts.subtitle')} lang="pt">
+  <PostsContent lang="pt" />
+</BaseLayout>

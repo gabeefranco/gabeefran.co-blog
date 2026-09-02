@@ -1,0 +1,29 @@
+---
+title: "Por que eu insisto em entender como as coisas funcionam"
+description: "Sobre o hábito de cavar além da abstração, e por que vale a pena o tempo extra."
+pubDate: 2026-08-25
+tags: ["learning", "philosophy"]
+---
+
+import ObservationCard from '../../../components/ObservationCard';
+
+Há um momento que acontece com bastante frequência quando estou aprendendo algo novo: uma ferramenta, uma biblioteca, um framework funciona, eu consigo o resultado que queria, e mesmo assim não me sinto satisfeito. Alguma coisa em mim precisa entender *por que* aquilo funcionou antes de eu conseguir seguir em frente.
+
+Isso é mais lento. Admito isso de cara. Dá pra entregar coisas mais rápido tratando uma biblioteca como uma caixa-preta, chamando a função documentada e confiando nela. Na maior parte do tempo essa é a decisão de engenharia correta, e eu também faço isso quando um prazo exige.
+
+Mas, por conta própria, eu vou pelo caminho contrário. Se uma ferramenta de build faz algo inesperado, prefiro ler o código-fonte dela por dez minutos a colar o erro numa busca. Se um recurso de uma linguagem parece mágica, eu quero saber para o que ele realmente compila ou se desdobra.
+
+<ObservationCard title="Observação">
+  Isso não é bem sobre desconfiar de abstrações — abstrações são o motivo de qualquer coisa
+  escalar. É que uma abstração que eu entendo é uma que eu posso quebrar com segurança quando
+  preciso, e uma que eu entendo *mal* costuma ser onde moram os problemas mais estranhos e mais
+  difíceis de debugar.
+</ObservationCard>
+
+## De onde isso vem
+
+Estou cursando ciência da computação na PUCRS, e se tem uma coisa que as disciplinas reforçam, é que quase toda ferramenta "avançada" é construída a partir de um pequeno número de ideias repetidas e combinadas: máquinas de estado, árvores, grafos, o loop de busca-decodificação-execução, camadas de indireção empilhadas sobre camadas de indireção. Depois que você de fato implementa uma versão de brinquedo de alguma coisa — um shell, um compilador minúsculo, um escalonador básico — a versão "de verdade" para de parecer mágica e passa a parecer uma decisão de engenharia que você consegue avaliar.
+
+Essa é parte do motivo pelo qual também acho a história do open source tão interessante: é o mesmo instinto aplicado a sistemas em vez de código. Saber *por que* o GNU existe, ou por que o Git foi construído do jeito que foi, muda como eu leio um histórico de commits ou uma thread de lista de e-mail. A ferramenta deixa de ser um dado e passa a ser uma decisão que alguém tomou, por motivos, sob restrições — que é exatamente o tipo de coisa que eu quero entender antes de confiar completamente nela.
+
+Não acho que isso seja uma virtude em algum sentido abstrato. É só um jeito bem específico e bem particular de trabalhar que combina comigo, e este blog é basicamente um registro dessa cavada.

@@ -1,0 +1,30 @@
+---
+title: "GNU, Linux, and the fight that built modern software"
+description: "A short history of the GNU project, Linus Torvalds' kernel, and the free/open source split that still shapes software today."
+pubDate: 2026-05-30
+tags: ["open-source", "history"]
+---
+
+Most of the software you rely on daily — the languages, the servers, half the tools in a typical terminal — traces back to a decision Richard Stallman made in 1983: to walk away from a proprietary printer driver dispute at MIT and start building a completely free replacement for Unix, from scratch. He called it GNU — "GNU's Not Unix," a recursive acronym, because that's the kind of joke that programmer culture loves.
+
+## The GNU project
+
+The GNU project's goal was total: a free operating system, kernel included, with every tool a Unix user would expect — a compiler, an editor, a shell, coreutils — released under licenses that guaranteed the freedom to run, study, modify, and share the software. That last part became the Free Software Foundation and the GPL, a license explicitly designed to keep derivative works free too — what Stallman called "copyleft."
+
+By the early 1990s, GNU had built almost everything: GCC, Emacs, Bash, binutils, glibc. Almost everything except a kernel. The GNU Hurd, its intended kernel, was ambitious in design and slow to mature.
+
+## Enter Linux
+
+In 1991, a Finnish student named Linus Torvalds posted a now-famous, deliberately modest message to a Usenet newsgroup: he was writing a "free operating system (just a hobby, won't be big and professional like gnu)" for 386(486) AT clones. That hobby project was a kernel — Linux.
+
+Linux filled exactly the gap GNU had left open. Combined with the GNU userland, you got a complete, free operating system: technically "GNU/Linux," though most people just say "Linux." The naming debate itself became a small piece of open source folklore — a genuine disagreement about credit and framing that's still occasionally relitigated on mailing lists today.
+
+Torvalds' contribution didn't stop at the kernel. In 2005, frustrated with existing tools for the scale and pace of kernel development, he wrote Git in about ten days. A distributed version control system built specifically to handle a project with thousands of contributors and no single point of trust. It's hard to overstate how much of today's software workflow — pull requests, forks, the entire GitHub/GitLab ecosystem — sits on top of a tool built to solve one very specific, very large-scale problem.
+
+## Why the history matters
+
+It's easy to use `git commit`, install a package with `apt`, or compile something with `gcc` without ever thinking about where they came from. But the free software movement wasn't inevitable — it was a specific, sometimes contentious set of choices about licensing, collaboration, and what "ownership" of software should even mean.
+
+The split between "free software" (Stallman's ethical framing, about user freedom) and "open source" (a later, more pragmatic framing coined partly to be palatable to business) is still a live philosophical distinction, not just semantics. Understanding it explains a lot about why different projects choose the licenses they do, and why some communities care so much about it.
+
+I find this history genuinely useful, not just interesting — it's a reminder that the tools we treat as neutral infrastructure were built by people making deliberate, sometimes idealistic bets. Worth knowing before you take them for granted.

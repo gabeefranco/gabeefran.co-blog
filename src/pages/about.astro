@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { useTranslations } from '../lib/i18n';
+
+const t = useTranslations('en');
+const description =
+  "Gabriel Franco (gabeefranco): computer science student at PUCRS, interested in how software actually works and in the history of the open source movement.";
+---
+
+<BaseLayout title={`${t('about.title')} — ${t('site.name')}`} description={description} lang="en">
+  <section class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+    <h1 class="text-3xl font-bold tracking-tight text-text sm:text-4xl">{t('about.title')}</h1>
+
+    <div class="prose prose-neutral mt-6 max-w-none prose-headings:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline dark:prose-invert">
+      <p>
+        Hi, I'm Gabe — Gabriel Franco. I'm a computer science student at PUCRS (Pontifícia
+        Universidade Católica do Rio Grande do Sul), and this blog is where I write down the
+        things I'm learning and thinking about along the way.
+      </p>
+      <p>
+        I care a lot about computer science as a field, not just as a set of tools to ship
+        products with. I have a fairly specific way of doing things: I'd rather understand a
+        system properly than memorize the steps to make it work, and I tend to slow down on
+        purpose to figure out what's actually happening under the hood — in a compiler, an
+        operating system, a language runtime, whatever it is. That habit shapes most of what ends
+        up on this blog.
+      </p>
+      <p>
+        I'm also genuinely interested in the history of the open source movement: the people,
+        the arguments, and the decisions that shaped the software we all rely on. Figures like
+        Linus Torvalds and projects like GNU come up often in what I read and write about, not
+        as trivia, but because understanding where a tool came from usually explains a lot about
+        how and why it works the way it does today.
+      </p>
+      <p>
+        This site is bilingual, in English and in Portuguese, and every post exists in both
+        languages. Thanks for stopping by.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
