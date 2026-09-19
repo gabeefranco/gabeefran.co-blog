@@ -15,7 +15,7 @@ const postsHref = getLocalizedPath('/posts', lang);
 const aboutHref = getLocalizedPath('/about', lang);
 ---
 
-<section class="mx-auto max-w-3xl px-4 pb-4 pt-14 sm:px-6 sm:pt-20">
+<section class="mx-auto max-w-3xl px-4 pb-4 pt-14 sm:px-6 sm:pt-20 font-mono">
   <div class="flex flex-col items-start gap-8 sm:flex-row sm:items-center">
     <img
       src="/logo.png"
@@ -28,16 +28,16 @@ const aboutHref = getLocalizedPath('/about', lang);
       <p class="text-sm font-semibold uppercase tracking-wide text-primary">{t('hero.kicker')}</p>
       <h1 class="mt-2 text-3xl font-bold tracking-tight text-text sm:text-4xl">{t('hero.title')}</h1>
       <p class="mt-4 max-w-xl text-lg leading-relaxed text-text-muted">{t('hero.subtitle')}</p>
-      <div class="mt-6 flex flex-wrap gap-3">
+      <div class="mt-6 flex flex-wrap gap-5">
         <a
           href={postsHref}
-          class="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+          class="text-primary hover:underline font-bold px-2 py-1 bg-primary/10"
         >
           {t('hero.cta.posts')}
         </a>
         <a
           href={aboutHref}
-          class="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:border-primary hover:text-primary"
+          class="text-text hover:underline font-bold px-2 py-1 bg-text/5"
         >
           {t('hero.cta.about')}
         </a>
@@ -46,7 +46,7 @@ const aboutHref = getLocalizedPath('/about', lang);
   </div>
 </section>
 
-<section class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+<section class="mx-auto max-w-3xl px-4 py-12 sm:px-6 font-mono">
   <div class="flex items-baseline justify-between gap-4">
     <div>
       <h2 class="text-xl font-semibold text-text">{t('home.recent')}</h2>
