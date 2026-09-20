@@ -15,46 +15,53 @@ const postsHref = getLocalizedPath('/posts', lang);
 const aboutHref = getLocalizedPath('/about', lang);
 ---
 
-<section class="mx-auto max-w-3xl px-4 pb-4 pt-14 sm:px-6 sm:pt-20 font-mono">
-  <div class="flex flex-col items-start gap-8 sm:flex-row sm:items-center">
-    <img
-      src="/logo.png"
-      alt=""
-      width="867"
-      height="458"
-      class="w-40 shrink-0 drop-shadow-sm sm:w-52"
-    />
-    <div>
-      <p class="text-sm font-semibold uppercase tracking-wide text-primary">{t('hero.kicker')}</p>
-      <h1 class="mt-2 text-3xl font-bold tracking-tight text-text sm:text-4xl">{t('hero.title')}</h1>
-      <p class="mt-4 max-w-xl text-lg leading-relaxed text-text-muted">{t('hero.subtitle')}</p>
-      <div class="mt-6 flex flex-wrap gap-5">
-        <a
-          href={postsHref}
-          class="text-primary hover:underline font-bold px-2 py-1 bg-primary/10"
-        >
-          {t('hero.cta.posts')}
-        </a>
-        <a
-          href={aboutHref}
-          class="text-text hover:underline font-bold px-2 py-1 bg-text/5"
-        >
-          {t('hero.cta.about')}
-        </a>
-      </div>
-    </div>
+<section class="mx-10 my-10 flex flex-col gap-5 font-mono">
+  <div class="flex flex-col gap-2">
+    <h1 class="text-text text-2xl">{t('hero.title')}</h1>
+    <h2 class="text-text text-lg">{t('hero.subtitle')}</h2>
   </div>
 </section>
 
-<section class="mx-auto max-w-3xl px-4 py-12 sm:px-6 font-mono">
+<!-- <section class="mx-auto max-w-3xl px-4 pb-4 pt-14 sm:px-6 sm:pt-20 font-mono"> -->
+<!--   <div class="flex flex-col items-start gap-8 sm:flex-row sm:items-center"> -->
+<!--     <img -->
+<!--       src="/logo.png" -->
+<!--       alt="" -->
+<!--       width="867" -->
+<!--       height="458" -->
+<!--       class="w-40 shrink-0 drop-shadow-sm sm:w-52" -->
+<!--     /> -->
+<!--     <div> -->
+<!--       <p class="text-sm font-semibold uppercase tracking-wide text-primary">{t('hero.kicker')}</p> -->
+<!--       <h1 class="mt-2 text-3xl font-bold tracking-tight text-text sm:text-4xl">{t('hero.title')}</h1> -->
+<!--       <p class="mt-4 max-w-xl text-lg leading-relaxed text-text-muted">{t('hero.subtitle')}</p> -->
+<!--       <div class="mt-6 flex flex-wrap gap-5"> -->
+<!--         <a -->
+<!--           href={postsHref} -->
+<!--           class="text-primary hover:underline font-bold px-2 py-1 bg-primary/10" -->
+<!--         > -->
+<!--           {t('hero.cta.posts')} -->
+<!--         </a> -->
+<!--         <a -->
+<!--           href={aboutHref} -->
+<!--           class="text-text hover:underline font-bold px-2 py-1 bg-text/5" -->
+<!--         > -->
+<!--           {t('hero.cta.about')} -->
+<!--         </a> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--   </div> -->
+<!-- </section> -->
+
+<section class="mx-10 font-mono">
   <div class="flex items-baseline justify-between gap-4">
     <div>
       <h2 class="text-xl font-semibold text-text">{t('home.recent')}</h2>
-      <p class="mt-1 text-sm text-text-muted">{t('home.recent.subtitle')}</p>
+      <p class="mt-1 text-sm text-text-muted mb-2">{t('home.recent.subtitle')}</p>
+      <a href={postsHref} class="shrink-0 text-sm font-medium text-primary hover:underline">
+        {t('home.viewAll')} &rarr;
+      </a>
     </div>
-    <a href={postsHref} class="shrink-0 text-sm font-medium text-primary hover:underline">
-      {t('home.viewAll')} &rarr;
-    </a>
   </div>
 
   {recentPosts.length > 0 ? (

@@ -15,8 +15,8 @@ const postsHref = getLocalizedPath('/posts', lang);
 const tagsHref = (tag: string) => getLocalizedPath(`/tags/${tag}`, lang);
 ---
 
-<article class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-  <a href={postsHref} class="inline-flex items-center gap-1.5 text-sm font-medium text-text-muted transition-colors hover:text-primary">
+<article class="mx-10 mt-10 font-mono">
+  <a href={postsHref} class="underline inline-flex items-center gap-1.5 text-sm font-medium text-text-muted hover:text-primary">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
       <path d="M15 18l-6-6 6-6"></path>
     </svg>
@@ -42,7 +42,7 @@ const tagsHref = (tag: string) => getLocalizedPath(`/tags/${tag}`, lang);
         {post.data.tags.map((tag) => (
           <a
             href={tagsHref(tag)}
-            class="rounded-full bg-surface-alt px-2.5 py-1 text-xs font-medium text-text-muted transition-colors hover:bg-accent/15 hover:text-accent"
+            class=" text-xs font-medium text-text-muted underline hover:text-accent"
           >
             #{tag}
           </a>

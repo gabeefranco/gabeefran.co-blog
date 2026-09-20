@@ -19,7 +19,7 @@ export const ui = {
     'hero.kicker': "Gabriel Franco's notes",
     'hero.title': 'Building things, and figuring out how they work.',
     'hero.subtitle':
-      "Notes on computer science, systems, and the open source projects that shaped how I think about software. I'm gabeefranco — welcome.",
+      "Notes on computer science, systems, and the open source projects that shaped how I think about software. I'm Gabriel Franco — welcome.",
     'hero.cta.posts': 'Read the posts',
     'hero.cta.about': 'About me',
     'home.recent': 'Recent posts',
@@ -54,7 +54,7 @@ export const ui = {
     'hero.kicker': 'Anotações do Gabriel Franco',
     'hero.title': 'Construindo coisas e entendendo como elas funcionam.',
     'hero.subtitle':
-      'Notas sobre ciência da computação, sistemas e os projetos open source que moldaram a forma como penso sobre software. Eu sou o gabeefranco — seja bem-vindo.',
+      'Notas sobre ciência da computação, sistemas e os projetos open source que moldaram a forma como penso sobre software. Eu sou o Gabriel Franco — seja bem-vindo.',
     'hero.cta.posts': 'Ler os posts',
     'hero.cta.about': 'Sobre mim',
     'home.recent': 'Posts recentes',

@@ -28,24 +28,71 @@ function isActive(href: string): boolean {
 }
 ---
 
-<header class="sticky top-0 z-40 border-b border-border/80 bg-bg/85 backdrop-blur">
-  <div class="mx-auto flex max-w-4/5 items-center justify-between gap-4 px-4 py-3 sm:px-6">
-    <a href={homeHref} class="flex shrink-0 items-center gap-2.5" aria-label={t('site.name')}>
-      <img src="/favicon.svg" alt="" width="32" height="32" class="size-8" />
-      <span class="font-mono text-[15px] font-semibold tracking-tight text-text">{t('site.name')}</span>
-    </a>
 
-    <div class="flex items-center gap-2">
-      <nav class="hidden items-center gap-1 sm:flex justify-right" aria-label={t('nav.menu')}>
+<header class="sticky top-0 z-40 border-b border-border/80 bg-bg/85 backdrop-blur">
+  <div class="flex flex-col justify-center gap-4 px-4 py-3 sm:px-6">
+    <div class="flex flex-row justify-between items-end">
+      <a href={homeHref} class="flex hover:underline shrink-0 items-center gap-2.5" aria-label={t('site.name')}>
+        <img src="/logo.png" class="h-4"/>
+        <span class="font-mono text-[15px] font-semibold tracking-tight text-text">{t('site.name')}</span>
+
+      </a>
+      <div class="ml-10 flex sm:hidden justify-end gap-3">
+      <a
+        href={langSwitchHref}
+        hreflang={otherLang}
+        title={t('lang.switch')}
+        aria-label={`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
+          class="text-accent max-w-fit font-mono text-xs sm:text-sm underline hover:cursor-pointer hover:text-accent-deep"
+      >
+        {`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
+      </a>
+
+      <ThemeToggle lang={lang} />
+      </div>
+    <div class="hidden sm:flex items-center gap-2">
+
+      <nav class="flex items-center gap-1 justify-right" aria-label={t('nav.menu')}>
         {navLinks.map((link) => (
           <a
             href={link.href}
             aria-current={isActive(link.href) ? 'page' : undefined}
             class:list={[
-              'px-2 py-1 text-sm font-medium font-mono hover:underline',
+              'px-2 py-1 text-sm font-medium font-mono underline',
               isActive(link.href)
-                ? 'bg-primary/10 text-primary'
-                : 'text-text-muted hover:bg-surface-alt hover:text-text',
+                ? 'text-primary hover:text-primary-hover'
+                : 'text-text-muted hover:text-text',
+            ]}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+      <a
+        href={langSwitchHref}
+        hreflang={otherLang}
+        title={t('lang.switch')}
+        aria-label={`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
+          class="text-accent max-w-fit py-1 font-mono text-xs sm:text-sm underline hover:cursor-pointer hover:text-accent-deep "
+      >
+        {`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
+      </a>
+
+      <ThemeToggle lang={lang} />
+    </div>
+    </div>
+
+    <div class="flex justify-end sm:hidden items-center gap-2">
+      <nav class="flex items-center gap-1 justify-right" aria-label={t('nav.menu')}>
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class:list={[
+              'px-2 py-1 text-sm font-medium font-mono underline',
+              isActive(link.href)
+                ? 'text-primary hover:text-primary-hover'
+                : 'text-text-muted hover:text-text',
             ]}
           >
             {link.label}
@@ -53,47 +100,7 @@ function isActive(href: string): boolean {
         ))}
       </nav>
 
-      <a
-        href={langSwitchHref}
-        hreflang={otherLang}
-        title={t('lang.switch')}
-        aria-label={`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
-        class="text-accent bg-accent/10 px-2 py-1 font-mono text-xs hover:underline hover:cursor-pointer"
-      >
-        {`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
-      </a>
 
-      <ThemeToggle lang={lang} />
-
-      <details class="relative sm:hidden">
-        <summary
-          class="grid size-9 cursor-pointer list-none place-items-center rounded-full border border-border text-text-muted transition-colors hover:border-primary hover:text-primary"
-          aria-label={t('nav.menu')}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="size-[18px]">
-            <path d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </summary>
-        <nav
-          class="absolute right-0 top-11 flex w-40 flex-col gap-1 rounded-xl border border-border bg-surface p-2 shadow-lg"
-          aria-label={t('nav.menu')}
-        >
-          {navLinks.map((link) => (
-            <a
-              href={link.href}
-              aria-current={isActive(link.href) ? 'page' : undefined}
-              class:list={[
-                'rounded-lg px-3 py-2 text-xs font-medium transition-colors',
-                isActive(link.href)
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-text-muted hover:bg-surface-alt hover:text-text',
-              ]}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-      </details>
     </div>
   </div>
 </header>
