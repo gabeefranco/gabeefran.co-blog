@@ -8,9 +8,10 @@ interface Props {
   title: string;
   description: string;
   lang: Lang;
+  keywords?: string;
 }
 
-const { title, description, lang } = Astro.props;
+const { title, description, lang, keywords } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -25,17 +26,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="en" href={new URL(Astro.url.pathname.replace(/^\/pt/, '') || '/', Astro.site)} />
     <link rel="alternate" hreflang="pt-BR" href={new URL(`/pt${Astro.url.pathname.replace(/^\/pt/, '')}`, Astro.site)} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    { keywords ? <meta name="keywords" content={keywords} /> : ''}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={new URL('/logo.png', Astro.site)} />
+    <meta property="og:image" content={new URL('/twitter-image.png', Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/twitter-image.png', Astro.site)} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -15,7 +15,7 @@ const { Content } = await render(post);
 const readingMinutes = estimateReadingMinutes(post.body ?? '');
 ---
 
-<BaseLayout title={`${post.data.title} — gabeefranco`} description={post.data.description} lang="en">
+<BaseLayout title={`${post.data.title} — gabeefranco`} description={post.data.description} keywords={post.data.seoKeywords} lang="en">
   <PostLayout post={post} lang="en" readingMinutes={readingMinutes}>
     <Content components={{ ObservationCard }} />
   </PostLayout>
