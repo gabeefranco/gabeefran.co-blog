@@ -1,0 +1,85 @@
+---
+// OG image template. Screenshotted by scripts/generate-social-cards.ts via
+// Cloudflare Browser Run; not meant to be visited directly.
+export const prerender = false;
+
+const title = Astro.url.searchParams.get('title') || 'Untitled';
+const description = Astro.url.searchParams.get('description');
+const author = Astro.url.searchParams.get('author');
+---
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 72px;
+        font-family: 'Inter', system-ui, sans-serif;
+        background: #fbf9f6;
+        color: #201a14;
+        border-bottom: 16px solid #e8590c;
+      }
+      .brand {
+        position: absolute;
+        top: 60px;
+        left: 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 40px;
+        font-weight: 600;
+      }
+      .brand img {
+        height: 64px;
+      }
+      .title {
+        font-size: 64px;
+        margin-left: 24px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 24px;
+      }
+      .description {
+        font-size: 28px;
+        line-height: 1.35;
+        color: #6b5f52;
+        margin-left: 24px;
+      }
+      .author {
+        margin-top: 24px;
+        margin-left: 24px;
+        margin-bottom: 24px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 24px;
+        color: #e8590c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="brand">
+      <img src="/logo.png" alt="" />
+      <span>gabeefranco</span>
+    </div>
+    <h1 class="title">{title}</h1>
+    {description && <p class="description">{description}</p>}
+    {author && <p class="author">{author}</p>}
+  </body>
+</html>

@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "og": "node --env-file-if-exists=.env scripts/generate-social-cards.ts"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.0",
