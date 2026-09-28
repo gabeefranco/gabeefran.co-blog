@@ -116,7 +116,7 @@ async function main() {
 
     // Stay under Browser Run rate limits.
     if (i < posts.length - 1) {
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
     }
   }
 
