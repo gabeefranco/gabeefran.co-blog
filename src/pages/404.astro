@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getLocalizedPath, ui, type Lang } from '../lib/i18n';
+import { PAGES, pageCardPath } from '../lib/pages';
 
 // This file is prerendered once as a static /404.html and served by the host
 // for any unmatched path, so we can't know at build time whether the visitor
@@ -9,7 +10,12 @@ import { getLocalizedPath, ui, type Lang } from '../lib/i18n';
 const langs: Lang[] = ['en', 'pt'];
 ---
 
-<BaseLayout title={`${ui.en['404.title']} — gabeefranco`} description={ui.en['404.body']} lang="en">
+<BaseLayout
+  title={`${PAGES.en['404'].title} — gabeefranco`}
+  description={PAGES.en['404'].description}
+  lang="en"
+  image={pageCardPath('en', '404')}
+>
   <section class="mx-10 flex flex-col items-start px-4 py-24 sm:px-6 font-mono">
     <p class="font-mono text-sm text-primary">404</p>
     {langs.map((lang) => (

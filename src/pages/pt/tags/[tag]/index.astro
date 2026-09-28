@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import PostsContent from '../../../../components/PostsContent.astro';
-import { getAllTags, getPostsByLang } from '../../../../lib/posts';
+import { getAllTags } from '../../../../lib/posts';
 import { useTranslations } from '../../../../lib/i18n';
+import { tagPage, tagCardPath } from '../../../../lib/pages';
 
 export async function getStaticPaths() {
   const tags = await getAllTags('pt');
@@ -11,13 +12,9 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const t = useTranslations('pt');
-const posts = (await getPostsByLang('pt')).filter((p) => p.data.tags.includes(tag!));
+const page = tagPage('pt', tag!);
 ---
 
-<BaseLayout
-  title={`#${tag} — ${t('site.name')}`}
-  description={`${t('posts.filteredBy')} #${tag}: ${posts.map((p) => p.data.title).join(', ')}`}
-  lang="pt"
->
+<BaseLayout title={`${page.title} — ${t('site.name')}`} description={page.description} lang="pt" image={tagCardPath('pt', tag!)}>
   <PostsContent lang="pt" tag={tag} />
 </BaseLayout>

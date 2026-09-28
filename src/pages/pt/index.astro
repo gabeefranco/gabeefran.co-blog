@@ -2,10 +2,17 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HomeContent from '../../components/HomeContent.astro';
 import { useTranslations } from '../../lib/i18n';
+import { PAGES, pageCardPath } from '../../lib/pages';
 
 const t = useTranslations('pt');
+const page = PAGES.pt.home;
 ---
 
-<BaseLayout title={`${t('site.name')} — ${t('hero.kicker')}`} description={t('hero.subtitle')} lang="pt">
+<BaseLayout
+  title={`${t('site.name')} — ${t('hero.kicker')}`}
+  description={page.description}
+  lang="pt"
+  image={pageCardPath('pt', 'home')}
+>
   <HomeContent lang="pt" />
 </BaseLayout>

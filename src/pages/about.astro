@@ -1,13 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { useTranslations } from '../lib/i18n';
+import { PAGES, pageCardPath } from '../lib/pages';
 
 const t = useTranslations('en');
-const description =
-  "Gabriel Franco (gabeefranco): computer science student at PUCRS, interested in how software actually works and in the history of the open source movement.";
+const page = PAGES.en.about;
 ---
 
-<BaseLayout title={`${t('about.title')} — ${t('site.name')}`} description={description} lang="en">
+<BaseLayout title={`${page.title} — ${t('site.name')}`} description={page.description} lang="en" image={pageCardPath('en', 'about')}>
   <section class="mx-10 mt-10 font-mono">
     <h1 class="text-3xl font-bold tracking-tight text-text sm:text-4xl">{t('about.title')}</h1>
 

@@ -2,10 +2,12 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostsContent from '../../../components/PostsContent.astro';
 import { useTranslations } from '../../../lib/i18n';
+import { PAGES, pageCardPath } from '../../../lib/pages';
 
 const t = useTranslations('pt');
+const page = PAGES.pt.posts;
 ---
 
-<BaseLayout title={`${t('posts.title')} — ${t('site.name')}`} description={t('posts.subtitle')} lang="pt">
+<BaseLayout title={`${page.title} — ${t('site.name')}`} description={page.description} lang="pt" image={pageCardPath('pt', 'posts')}>
   <PostsContent lang="pt" />
 </BaseLayout>
