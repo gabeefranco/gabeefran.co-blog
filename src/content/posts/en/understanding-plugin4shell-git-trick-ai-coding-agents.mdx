@@ -1,0 +1,228 @@
+---
+title: "Understanding Plugin4Shell: An Exploit That Uses a Simple Git Trick to Fool AI Coding Agents"
+description: "A git branch named after a commit hash was enough to make AI coding agents run unverified plugins. I reproduced the Plugin4Shell trick on GitHub and Forgejo."
+pubDate: 2026-09-28
+tags: ["cybersecurity", "git", "ai", "software"]
+seoKeywords: "Plugin4Shell, git branch named after commit hash, SHA pinning bypass, AI coding agents security, Claude Code plugin vulnerability, supply chain attack, git internals, Forgejo"
+---
+
+This post is based on [Ana Maria Constantin's post at TheNextWeb](https://thenextweb.com/news/plugin4shell-ai-coding-agents-zero-click-rce-sha-pinning) and [Air Security's report](https://www.air.security/blog-posts/plugin4shell).
+
+AI coding agents like Claude Code and Codex install plugins from their marketplaces. Knowing that attackers could use plugins to ship malicious code, AI companies employed a simple security measure. They locked the plugins to a version that was reviewed and approved. But what if someone could bypass that lock? That's *exactly* what happened.
+
+Researchers at Air Security discovered a vulnerability they called [Plugin4Shell](https://www.air.security/blog-posts/plugin4shell), which exploited how agents verified plugins. With a simple git trick, they were able to make the agent download and run unverified code. That means **Remote Code Execution**, token stealing, or anything that malicious code does.
+
+Anthropic fixed it in **Claude Code 2.1.179** and OpenAI in **Codex 0.146.0**. Anyway, as a Computer Science student, I think this is a great opportunity to learn about git, supply chain attacks, and cybersecurity in general. So, let's dive into it!
+
+## The Scenario
+
+The industry's defense against malicious plugins was to *pin* each plugin to a specific commit. That commit was reviewed and approved, so it was considered safe. A commit hash is a SHA-1 of the commit's content and history, so it's content-addressed and *immutable*. But there is an issue with git itself. **Branches and tags are just movable name tags.** Interesting...
+
+The commit hash is a 40-character-long string. What if there is a branch with the same name as a commit hash? Some git commands, like `checkout` and `clone --branch`, **actually prefer the branch**.
+
+That's what they used to trick the agent into downloading and running unverified code!
+
+## The attack, step by step
+
+The attack consisted of the following steps:
+
+1. The attackers create a plugin that is completely secure, no exploits and no malicious code. Let's suppose the hash for that commit is `xxxx`.
+2. They get the marketplace's approval, and the plugin is pinned at commit `xxxx`.
+3. Users start downloading and using the plugin.
+4. They ship malicious code in a separate branch, named `xxxx`.
+5. The agents refresh the plugin in the background, **no user interaction needed**.
+6. Instead of the pinned commit, git chooses the latest commit on the branch with the same name.
+7. The malicious code gets executed and, just like that, users are hacked.
+
+## How does it work?
+
+Let's test this trick ourselves in a local git repository. First, we create the repo and make a clean commit to pass the verification:
+
+```sh
+git init demo && cd demo
+echo "print('safe plugin')" > plugin.py
+git add . && git commit -m "safe version"
+```
+
+Now, let's run `git log` to get the commit hash.
+
+```
+commit 290b9e171e7b6facfe1e244a22c7152b31b6c290 (HEAD -> main)
+Author: Gabriel Franco <gabe@example.com>
+Date:   Mon Sep 28 09:10:09 2026 -0300
+
+    safe version
+```
+
+There it is! `290b9e171e7b6facfe1e244a22c7152b31b6c290` is our commit hash. Now, let's create the evil branch:
+
+```sh
+git switch -c evil
+echo "print('you got HACKED')" > plugin.py
+git commit -am "evil version"
+```
+
+But the branch name is still `evil`. Sounds pretty suspicious, actually. Let's change it to our commit hash.
+
+```sh
+git branch -m 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+This renamed the branch, so its name is exactly the hash from the safe and verified commit. Now, let's switch to the main branch with `git switch -` and try to access our safe commit with `git checkout`:
+
+```sh
+git checkout 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+Git even gave me a warning:
+
+```
+warning: refname '290b9e171e7b6facfe1e244a22c7152b31b6c290' is ambiguous.
+Git normally never creates a ref that ends with 40 hex characters
+because it will be ignored when you just specify 40-hex. These refs
+may be created by mistake. For example,
+
+  git switch -c $br $(git rev-parse ...)
+
+where "$br" is somehow empty and a 40-hex ref is created. Please
+examine these refs and maybe delete them. Turn this message off by
+running "git config set advice.objectNameWarning false"
+Switched to branch '290b9e171e7b6facfe1e244a22c7152b31b6c290'
+```
+
+That's a good thing. But the warning probably isn't seen by the agent, who is not expecting any output from `checkout`, as long as its exit status is 0.
+
+Let's check the content of `plugin.py`:
+
+```python
+print('you got HACKED')
+```
+
+Oops... Looks like we got HACKED!
+
+## But can the git platforms fix it?
+
+Apparently, GitHub already did it. I couldn't find a source that confirms when this change was made, but let's test it ourselves. I created a private repository on GitHub, then went back to the terminal:
+
+```sh
+git switch main
+git remote add origin git@github.com:gabeefranco/demo-trick.git
+git push -u origin main
+```
+
+Well, the `main` branch pushes fine:
+
+```
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 236 bytes | 236.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To github.com:gabeefranco/demo-trick.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+Now, let's see what happens to our branch named after the commit hash:
+
+```sh
+git push -u origin 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+As we can see, GitHub rejects it:
+
+```
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Writing objects: 100% (3/3), 269 bytes | 269.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: error: GH002: Sorry, branch or tag names consisting of 40 or 64 hex characters are not allowed.
+remote: error: Invalid branch or tag name "290b9e171e7b6facfe1e244a22c7152b31b6c290"
+To github.com:gabeefranco/demo-trick.git
+ ! [remote rejected] 290b9e171e7b6facfe1e244a22c7152b31b6c290 -> 290b9e171e7b6facfe1e244a22c7152b31b6c290 (pre-receive hook declined)
+error: failed to push some refs to 'github.com:gabeefranco/demo-trick.git'
+```
+
+That's really good! Kudos to GitHub and all their Microsoft slop. They surprised me *this time*!
+
+### What about other platforms?
+
+In AI plugin marketplaces, the git repositories can be hosted on any platform, including a self-hosted Forgejo instance, for example. [Forgejo](https://forgejo.org/) is a fork of [Gitea](https://about.gitea.com/), and it allows us to self-host our git projects in the style of GitHub, but 100% open-source. It's good open-source software, I will write a post about it someday. My Forgejo version is `9.0.3+gitea-1.22.0`, as you can verify with `curl -s https://git.gabeefran.co/api/v1/version`. Keep in mind the behavior I showcase here may change in a future release.
+
+In my own instance, let's test the branch naming. After creating a repository (this time, I will keep it public), I ran:
+
+```sh
+git remote remove origin
+git remote add origin git@git.gabeefran.co:gabeefranco/git-trick.git
+git push -u origin main
+```
+
+Again, `main` pushes correctly:
+
+```
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 236 bytes | 236.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To git.gabeefran.co:gabeefranco/git-trick.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+But `main` is verified by the marketplace. Let's test our evil branch:
+
+```sh
+git push -u origin 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+Unfortunately, Forgejo **doesn't implement the same fix**:
+
+```
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Writing objects: 100% (3/3), 269 bytes | 269.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: 
+remote: Create a new pull request for '290b9e171e7b6facfe1e244a22c7152b31b6c290':
+remote:   https://git.gabeefran.co/gabeefranco/git-trick/compare/main...290b9e171e7b6facfe1e244a22c7152b31b6c290
+remote: 
+To git.gabeefran.co:gabeefranco/git-trick.git
+ * [new branch]      290b9e171e7b6facfe1e244a22c7152b31b6c290 -> 290b9e171e7b6facfe1e244a22c7152b31b6c290
+branch '290b9e171e7b6facfe1e244a22c7152b31b6c290' set up to track 'origin/290b9e171e7b6facfe1e244a22c7152b31b6c290'.
+```
+
+I will keep this repository public. You can check it out [here](https://git.gabeefran.co/gabeefranco/git-trick). Just note that the commit hashes are different, because I had to edit them in order to maintain the consistency in the writing of this post.
+
+## How to defend against it
+
+First things first: if you use Claude Code or Codex, update them. Anything from **Claude Code 2.1.179** and **Codex 0.146.0** onwards is already fixed.
+
+But what if you're writing a tool that pins git commits, just like the agents do? My first idea was `git checkout --detach`, since it should treat the argument as a commit, not a branch. I tested it in the same demo repo:
+
+```sh
+git checkout --detach 290b9e171e7b6facfe1e244a22c7152b31b6c290
+```
+
+And `plugin.py` still said `you got HACKED`. Not even `--detach` saves us here! What actually works is appending `^{commit}` to the hash, which forces git to resolve it as a commit object:
+
+```sh
+git checkout --detach "290b9e171e7b6facfe1e244a22c7152b31b6c290^{commit}"
+```
+
+This time, we got the `safe plugin` back. Even so, don't trust the resolution blindly. **After checking out, always verify that `HEAD` is exactly the pinned hash**, and abort if it isn't:
+
+```sh
+PIN=290b9e171e7b6facfe1e244a22c7152b31b6c290
+[ "$(git rev-parse HEAD)" = "$PIN" ] || { echo "HEAD doesn't match the pin, aborting!"; exit 1; }
+```
+
+It's one line of shell, and it would have stopped this attack. If the agents did this, the evil branch would be useless.
+
+And if you self-host your git projects, like me, you can do what GitHub did and reject branch and tag names made of 40 or 64 hex characters with a pre-receive hook. There's no legitimate reason for a branch to look like a commit hash anyway.
+
+## Wrapping up
+
+The main problem was that the agents asked git for the pinned commit, but they never verified if what they got back actually matched that hash. Pinning to commit SHAs is the standard advice against supply-chain attacks. Plugin4Shell shows that **pinning is only as good as how you _resolve_ the pin**.
+
+By studying this case, we learned a lot about supply chain attacks, git internals and the cybersecurity involved in the AI agents scene. Many props to [Air Security](https://www.air.security/) for researching this topic and discovering this vulnerability.
+
+I had a lot of fun writing this post, hope you enjoyed!
