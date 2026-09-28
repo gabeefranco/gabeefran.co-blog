@@ -11,25 +11,53 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-border/80 font-mono">
-  <div class="mx-auto flex max-w-3xl flex-col gap-2 px-4 py-8 text-sm text-text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
+  <div class="mx-auto flex flex-col gap-2 px-4 py-8 items-center text-xs text-text-muted lg:flex-row lg:justify-center lg:px-6">
     <p>
       &copy; {year} <span class="font-mono text-text">gabeefranco</span> &middot; {t('footer.rights')}
     </p>
     <div class="flex items-center gap-4">
-      <span class="hidden sm:inline">{t('footer.tagline')}</span>
       <a
         href="https://github.com/gabeefranco"
         target="_blank"
         rel="noopener noreferrer me"
-        class="transition-colors hover:text-primary"
+        class="text-primary hover:text-primary-hover underline"
+        data-umami-event="github-profile-footer-click"
       >
         GitHub
       </a>
       <a
-        href="https://github.com/gabeefranco/gabeefran.co-blog"
+        href="https://linkedin.com/in/gabeefranco"
         target="_blank"
         rel="noopener noreferrer"
-        class="transition-colors hover:text-primary"
+        class="text-primary hover:text-primary-hover underline"
+        data-umami-event="linkedin-footer-click"
+      >
+        LinkedIn
+      </a>
+      <a
+        href="https://x.com/gabeefranco_"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:text-primary-hover underline"
+        data-umami-event="twitter-footer-click"
+      >
+        X.com
+      </a>
+      <a
+        href="https://instagram.com/gabeefranco_"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:text-primary-hover underline"
+        data-umami-event="instagram-footer-click"
+      >
+        Instagram
+      </a>
+      <a
+        href="https://git.gabeefran.co/gabeefranco/gabeefran.co-blog"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:text-primary-hover underline"
+        data-umami-event="source-footer-click"
       >
         {t('footer.source')}
       </a>

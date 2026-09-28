@@ -17,9 +17,9 @@ const aboutHref = getLocalizedPath('/about', lang);
 const langSwitchHref = getLocalizedPath(pathname, otherLang);
 
 const navLinks = [
-  { href: homeHref, label: t('nav.home') },
-  { href: postsHref, label: t('nav.posts') },
-  { href: aboutHref, label: t('nav.about') },
+{ href: homeHref, label: t('nav.home'), id: 'home' },
+{ href: postsHref, label: t('nav.posts'), id: 'posts' },
+{ href: aboutHref, label: t('nav.about'), id: 'about' },
 ];
 
 function isActive(href: string): boolean {
@@ -32,7 +32,7 @@ function isActive(href: string): boolean {
 <header class="sticky top-0 z-40 border-b border-border/80 bg-bg/85 backdrop-blur">
   <div class="flex flex-col justify-center gap-4 px-4 py-3 sm:px-6">
     <div class="flex flex-row justify-between items-end">
-      <a href={homeHref} class="flex hover:underline shrink-0 items-center gap-2.5" aria-label={t('site.name')}>
+      <a href={homeHref} class="flex hover:underline shrink-0 items-center gap-2.5" aria-label={t('site.name')} data-umami-event="logo-header-click">
         <img src="/logo.png" class="h-4"/>
         <span class="font-mono text-[15px] font-semibold tracking-tight text-text">{t('site.name')}</span>
 
@@ -43,7 +43,8 @@ function isActive(href: string): boolean {
         hreflang={otherLang}
         title={t('lang.switch')}
         aria-label={`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
-          class="text-accent max-w-fit font-mono text-xs sm:text-sm underline hover:cursor-pointer hover:text-accent-deep"
+        data-umami-event="switch-language-header-click" 
+        class="text-accent max-w-fit font-mono text-xs sm:text-sm underline hover:cursor-pointer hover:text-accent-deep"
       >
         {`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
       </a>
@@ -63,6 +64,7 @@ function isActive(href: string): boolean {
                 ? 'text-primary hover:text-primary-hover'
                 : 'text-text-muted hover:text-text',
             ]}
+            data-umami-event={`${link.id}-header-click`}
           >
             {link.label}
           </a>
@@ -73,7 +75,8 @@ function isActive(href: string): boolean {
         hreflang={otherLang}
         title={t('lang.switch')}
         aria-label={`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
-          class="text-accent max-w-fit py-1 font-mono text-xs sm:text-sm underline hover:cursor-pointer hover:text-accent-deep "
+        data-umami-event="switch-language-header-click" 
+        class="text-accent max-w-fit py-1 font-mono text-xs sm:text-sm underline hover:cursor-pointer hover:text-accent-deep "
       >
         {`${t('lang.switch')}: ${LANG_LABELS[otherLang]}`}
       </a>
@@ -94,6 +97,7 @@ function isActive(href: string): boolean {
                 ? 'text-primary hover:text-primary-hover'
                 : 'text-text-muted hover:text-text',
             ]}
+            data-umami-event={`${link.id}-header-click`}
           >
             {link.label}
           </a>
