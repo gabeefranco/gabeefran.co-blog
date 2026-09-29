@@ -9,12 +9,12 @@ export function langOf(entry: PostEntry): Lang {
 }
 
 export function slugOf(entry: PostEntry): string {
-  return entry.id.split('/').slice(1).join('/');
+  return entry.id.replace('pt-', '').replace('en-', '');
 }
 
 export async function getPostsByLang(lang: Lang): Promise<PostEntry[]> {
   const posts = await getCollection('posts', ({ id, data }) => {
-    return id.startsWith(`${lang}/`) && !data.draft;
+    return id.startsWith(`${lang}-`) && !data.draft;
   });
   return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }

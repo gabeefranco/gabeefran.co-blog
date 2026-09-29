@@ -23,7 +23,7 @@ const navLinks = [
 ];
 
 function isActive(href: string): boolean {
-  if (href === homeHref) return pathname === href;
+  if (href === homeHref) return pathname.replace(/\/$/, '') === href;
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 ---
@@ -31,7 +31,7 @@ function isActive(href: string): boolean {
 
 <header class="sticky top-0 z-40 border-b border-border/80 bg-bg/85 backdrop-blur">
   <div class="flex flex-col justify-center gap-4 px-4 py-3 sm:px-6">
-    <div class="flex flex-row justify-between items-end">
+    <div class="flex flex-row justify-between items-center">
       <a href={homeHref} class="flex hover:underline shrink-0 items-center gap-2.5" aria-label={t('site.name')} data-umami-event="logo-header-click">
         <img src="/logo.png" class="h-4"/>
         <span class="font-mono text-[15px] font-semibold tracking-tight text-text">{t('site.name')}</span>

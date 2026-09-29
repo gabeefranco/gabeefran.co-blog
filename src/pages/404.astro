@@ -1,24 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getLocalizedPath, ui, type Lang } from '../lib/i18n';
-import { PAGES, pageCardPath } from '../lib/pages';
+import { getLocalizedPath, LANGS, pageMeta, ui } from '../lib/i18n';
+import { pageCardPath } from '../lib/social-cards';
 
 // This file is prerendered once as a static /404.html and served by the host
 // for any unmatched path, so we can't know at build time whether the visitor
 // was under /pt/*. Render both languages and pick one at runtime with a tiny
 // inline script based on the actual requested path.
-const langs: Lang[] = ['en', 'pt'];
+const page = pageMeta('en', '404');
 ---
 
 <BaseLayout
-  title={`${PAGES.en['404'].title} — gabeefranco`}
-  description={PAGES.en['404'].description}
+  title={`${page.title} — ${ui.en['site.name']}`}
+  description={page.description}
   lang="en"
   image={pageCardPath('en', '404')}
 >
   <section class="mx-10 flex flex-col items-start px-4 py-24 sm:px-6 font-mono">
     <p class="font-mono text-sm text-primary">404</p>
-    {langs.map((lang) => (
+    {LANGS.map((lang) => (
       <div data-notfound-lang={lang} class={lang === 'en' ? '' : 'hidden'}>
         <h1 class="mt-2 text-3xl font-bold tracking-tight text-text">{ui[lang]['404.title']}</h1>
         <p class="mt-3 text-text-muted">{ui[lang]['404.body']}</p>

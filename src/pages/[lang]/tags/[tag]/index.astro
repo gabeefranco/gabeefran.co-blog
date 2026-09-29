@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PostsContent from '../../../../components/PostsContent.astro';
+import { LANGS, tagPageMeta, useTranslations, type Lang } from '../../../../lib/i18n';
+import { getAllTags } from '../../../../lib/posts';
+import { tagCardPath } from '../../../../lib/social-cards';
+
+export async function getStaticPaths() {
+  const pathsByLang = await Promise.all(
+    LANGS.map(async (lang) => (await getAllTags(lang)).map((tag) => ({ params: { lang, tag } }))),
+  );
+  return pathsByLang.flat();
+}
+
+const lang = Astro.params.lang as Lang;
+const tag = Astro.params.tag!;
+const t = useTranslations(lang);
+const page = tagPageMeta(lang, tag);
+---
+
+<BaseLayout title={`${page.title} — ${t('site.name')}`} description={page.description} lang={lang} image={tagCardPath(lang, tag)}>
+  <PostsContent lang={lang} tag={tag} />
+</BaseLayout>

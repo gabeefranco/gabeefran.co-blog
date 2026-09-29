@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { langPaths, pageMeta, useTranslations, type Lang } from '../../lib/i18n';
+import { pageCardPath } from '../../lib/social-cards';
+
+export const getStaticPaths = langPaths;
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const page = pageMeta(lang, 'about');
+---
+
+<BaseLayout title={`${page.title} — ${t('site.name')}`} description={page.description} lang={lang} image={pageCardPath(lang, 'about')}>
+  <section class="mx-10 mt-10 font-mono">
+    <h1 class="text-3xl font-bold tracking-tight text-text sm:text-4xl">{page.title}</h1>
+
+    <div class="prose prose-neutral mt-6 max-w-none prose-headings:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline dark:prose-invert">
+      {t('about.body').split('\n\n').map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </section>
+</BaseLayout>

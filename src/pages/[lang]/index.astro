@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HomeContent from '../../components/HomeContent.astro';
+import { langPaths, pageMeta, useTranslations, type Lang } from '../../lib/i18n';
+import { pageCardPath } from '../../lib/social-cards';
+
+export const getStaticPaths = langPaths;
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  title={`${t('site.name')} — ${t('hero.kicker')}`}
+  description={pageMeta(lang, 'home').description}
+  lang={lang}
+  image={pageCardPath(lang, 'home')}
+>
+  <HomeContent lang={lang} />
+</BaseLayout>

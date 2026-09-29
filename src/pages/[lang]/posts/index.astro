@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostsContent from '../../../components/PostsContent.astro';
+import { langPaths, pageMeta, useTranslations, type Lang } from '../../../lib/i18n';
+import { pageCardPath } from '../../../lib/social-cards';
+
+export const getStaticPaths = langPaths;
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const page = pageMeta(lang, 'posts');
+---
+
+<BaseLayout title={`${page.title} — ${t('site.name')}`} description={page.description} lang={lang} image={pageCardPath(lang, 'posts')}>
+  <PostsContent lang={lang} />
+</BaseLayout>

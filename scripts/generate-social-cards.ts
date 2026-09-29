@@ -9,20 +9,20 @@
 // /social-card and /page-card routes must be deployed at BASE_URL.
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { PAGES, pageCardPath, tagCardPath, tagPage, type PageKey } from '../src/lib/pages.ts';
+import { LANGS, pageMeta, tagPageMeta, type Lang, type PageKey } from '../src/lib/i18n.ts';
+import { pageCardPath, postCardPath, tagCardPath } from '../src/lib/social-cards.ts';
 
 const BASE_URL = process.env.SOCIAL_CARD_BASE_URL ?? 'https://gabeefran.co';
 const CF_API = 'https://api.cloudflare.com/client/v4/accounts';
 const POSTS_DIR = 'src/content/posts';
-const LANGS = ['en', 'pt'] as const;
 // 404.html is prerendered once, in English (see src/pages/404.astro).
-const LANG_PAGES: Record<(typeof LANGS)[number], PageKey[]> = {
+const LANG_PAGES: Record<Lang, PageKey[]> = {
   en: ['home', 'posts', 'about', '404'],
   pt: ['home', 'posts', 'about'],
 };
 
 interface Post {
-  lang: (typeof LANGS)[number];
+  lang: Lang;
   slug: string;
   title: string;
   description?: string;
@@ -72,13 +72,13 @@ function listCards(posts: Post[]): Card[] {
   const postCards: Card[] = posts.map((post) => {
     const params: Record<string, string> = { title: post.title, author: 'Gabriel Franco' };
     if (post.description) params.description = post.description;
-    return { path: `/social-cards/${post.lang}/${post.slug}.png`, route: '/social-card', params };
+    return { path: postCardPath(post.lang, post.slug), route: '/social-card', params };
   });
 
   const pageCards: Card[] = LANGS.flatMap((lang) => {
-    const pages = LANG_PAGES[lang].map((key) => ({ path: pageCardPath(lang, key), meta: PAGES[lang][key] }));
+    const pages = LANG_PAGES[lang].map((key) => ({ path: pageCardPath(lang, key), meta: pageMeta(lang, key) }));
     const tags = [...new Set(posts.filter((p) => p.lang === lang).flatMap((p) => p.tags))].sort();
-    const tagPages = tags.map((tag) => ({ path: tagCardPath(lang, tag), meta: tagPage(lang, tag) }));
+    const tagPages = tags.map((tag) => ({ path: tagCardPath(lang, tag), meta: tagPageMeta(lang, tag) }));
     return [...pages, ...tagPages].map(({ path, meta }) => ({
       path,
       route: '/page-card' as const,
