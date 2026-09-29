@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gabeefran.co/sitemap-index.xml
