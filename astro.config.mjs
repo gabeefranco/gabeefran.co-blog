@@ -1,4 +1,5 @@
 // @ts-check
+import { readdirSync, readFileSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
@@ -28,6 +29,16 @@ const LEGACY_EN_PATHS = [
   '/feed.xml',
 ];
 
+// Draft posts still get a page (reachable by URL) but stay out of the sitemap.
+// This runs before content collections exist, so read the frontmatter directly.
+const DRAFT_PATHS = readdirSync('./src/content/posts', { recursive: true, encoding: 'utf-8' })
+  .filter((file) => file.endsWith('.mdx'))
+  .map((file) => readFileSync(`./src/content/posts/${file}`, 'utf-8'))
+  .filter((raw) => /^draft:\s*true\s*$/m.test(raw))
+  .map((raw) => raw.match(/^slug:\s*"?(en|pt)-([^"\n]+)"?/m))
+  .filter((match) => match !== null)
+  .map(([, lang, slug]) => `/${lang}/posts/${slug.trim()}/`);
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://gabeefran.co',
@@ -39,7 +50,7 @@ export default defineConfig({
 
   redirects: Object.fromEntries(LEGACY_EN_PATHS.map((path) => [path, path === '/' ? '/en' : `/en${path}`])),
 
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [react(), mdx(), sitemap({ filter: (page) => !DRAFT_PATHS.some((path) => page.endsWith(path)) })],
 
   adapter: vercel({
     webAnalytics: { enabled: true },

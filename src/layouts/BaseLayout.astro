@@ -15,9 +15,11 @@ interface Props {
    * on disk we fall back to the logo.
    */
   image?: string;
+  /** Keep the page out of search engines (used for draft posts). */
+  noindex?: boolean;
 }
 
-const { title, description, lang } = Astro.props;
+const { title, description, lang, noindex } = Astro.props;
 const image = Astro.props.image && existsSync(`public${Astro.props.image}`) ? Astro.props.image : '/logo.png';
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -38,6 +40,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Gabriel Franco's notes" />

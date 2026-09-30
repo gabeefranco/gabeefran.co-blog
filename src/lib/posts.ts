@@ -12,9 +12,13 @@ export function slugOf(entry: PostEntry): string {
   return entry.id.replace('pt-', '').replace('en-', '');
 }
 
-export async function getPostsByLang(lang: Lang): Promise<PostEntry[]> {
+/**
+ * Drafts are left out by default so they never show up in lists, tags or the
+ * feed. Pass `includeDrafts` to still build their pages (reachable by URL only).
+ */
+export async function getPostsByLang(lang: Lang, { includeDrafts = false } = {}): Promise<PostEntry[]> {
   const posts = await getCollection('posts', ({ id, data }) => {
-    return id.startsWith(`${lang}-`) && !data.draft;
+    return id.startsWith(`${lang}-`) && (includeDrafts || !data.draft);
   });
   return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }

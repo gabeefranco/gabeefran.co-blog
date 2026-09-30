@@ -10,7 +10,7 @@ import { postCardPath } from '../../../lib/social-cards';
 export async function getStaticPaths() {
   const pathsByLang = await Promise.all(
     LANGS.map(async (lang) =>
-      (await getPostsByLang(lang)).map((post) => ({ params: { lang, slug: slugOf(post) }, props: { post } })),
+      (await getPostsByLang(lang, { includeDrafts: true })).map((post) => ({ params: { lang, slug: slugOf(post) }, props: { post } })),
     ),
   );
   return pathsByLang.flat();
@@ -28,6 +28,7 @@ const readingMinutes = estimateReadingMinutes(post.body ?? '');
   description={post.data.description}
   lang={lang}
   image={postCardPath(lang, slugOf(post))}
+  noindex={post.data.draft}
 >
   <PostLayout post={post} lang={lang} readingMinutes={readingMinutes}>
     <Content components={{ ObservationCard }} />
