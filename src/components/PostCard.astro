@@ -13,7 +13,7 @@ const href = getLocalizedPath(`/posts/${slugOf(post)}`, lang);
 const tagsHref = (tag: string) => getLocalizedPath(`/tags/${tag}`, lang);
 ---
 
-<article class="group border-b border-border py-6 first:pt-0 last:border-b-0 font-mono">
+<article class="group border-b border-border py-6 first:pt-0 last:border-b-0 font-prose">
   <a href={href} class="block">
     <time datetime={post.data.pubDate.toISOString()} class="text-xs font-medium uppercase tracking-wide text-text-muted">
       {formatDate(post.data.pubDate, lang)}

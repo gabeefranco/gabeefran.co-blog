@@ -6,7 +6,8 @@
 
 @theme inline {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-prose: var(--font-iawriter), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: var(--font-iawriter), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-bg: var(--bg);
   --color-surface: var(--surface);

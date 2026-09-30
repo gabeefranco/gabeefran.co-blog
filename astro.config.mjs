@@ -1,6 +1,7 @@
 // @ts-check
 import { readdirSync, readFileSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 
 import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
@@ -53,10 +54,27 @@ export default defineConfig({
   integrations: [react(), mdx(), sitemap({ filter: (page) => !DRAFT_PATHS.some((path) => page.endsWith(path)) })],
 
   adapter: vercel({
-    webAnalytics: { enabled: true },
+    webAnalytics: { enabled: false },
   }),
 
   vite: {
     plugins: [tailwindcss()],
   },
+
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: "iA Writer Duo S",
+      cssVariable: "--font-iawriter",
+      options: {
+        variants: [
+          {
+            src: ['./src/assets/iAWriterDuoS-Regular.woff2'],
+            weight: 'normal',
+            style: 'normal'
+          }
+        ]
+      }
+    }
+  ]
 });
