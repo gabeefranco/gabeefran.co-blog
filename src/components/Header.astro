@@ -1,9 +1,12 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import { getAboutPath } from '../lib/about';
 import { getLocalizedPath, LANG_LABELS, useTranslations, type Lang } from '../lib/i18n';
 
 interface Props {
   lang: Lang;
+  /** Where the language switch goes; defaults to swapping the /<lang> prefix. */
+  langSwitchHref?: string;
 }
 
 const { lang } = Astro.props;
@@ -13,8 +16,8 @@ const otherLang: Lang = lang === 'en' ? 'pt' : 'en';
 const pathname = Astro.url.pathname;
 const homeHref = getLocalizedPath('/', lang);
 const postsHref = getLocalizedPath('/posts', lang);
-const aboutHref = getLocalizedPath('/about', lang);
-const langSwitchHref = getLocalizedPath(pathname, otherLang);
+const aboutHref = await getAboutPath(lang);
+const langSwitchHref = Astro.props.langSwitchHref ?? getLocalizedPath(pathname, otherLang);
 
 const navLinks = [
 { href: homeHref, label: t('nav.home'), id: 'home' },

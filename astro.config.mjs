@@ -49,7 +49,11 @@ export default defineConfig({
   // routing would add middleware that 404s the unprefixed on-demand
   // /page-card and /social-card routes (prefix-always) or /en/* (default).
 
-  redirects: Object.fromEntries(LEGACY_EN_PATHS.map((path) => [path, path === '/' ? '/en' : `/en${path}`])),
+  redirects: {
+    ...Object.fromEntries(LEGACY_EN_PATHS.map((path) => [path, path === '/' ? '/en' : `/en${path}`])),
+    // The Portuguese about page moved to /pt/sobre (slug from src/content/about/pt.md).
+    '/pt/about': '/pt/sobre',
+  },
 
   integrations: [react(), mdx(), sitemap({ filter: (page) => !DRAFT_PATHS.some((path) => page.endsWith(path)) })],
 

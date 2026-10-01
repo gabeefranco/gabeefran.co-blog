@@ -18,4 +18,14 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { posts };
+// The about page, one file per language: src/content/about/<lang>.md.
+// `slug` is the URL segment for that language (about, sobre).
+const about = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/about' }),
+  schema: z.object({
+    language: z.enum(['en', 'pt']),
+    slug: z.string(),
+  }),
+});
+
+export const collections = { posts, about };

@@ -45,13 +45,6 @@ export const ui = {
     'about.title': 'About',
     'about.description':
       'Gabriel Franco: computer science student at PUCRS, interested in how software actually works and in the history of open source.',
-    // Paragraphs are separated by a blank line.
-    'about.body': [
-      "Hi, I'm Gabe — Gabriel Franco. I'm a computer science student at PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul), and this blog is where I write down the things I'm learning and thinking about along the way.",
-      "I care a lot about computer science as a field, not just as a set of tools to ship products with. I have a fairly specific way of doing things: I'd rather understand a system properly than memorize the steps to make it work, and I tend to slow down on purpose to figure out what's actually happening under the hood — in a compiler, an operating system, a language runtime, whatever it is. That habit shapes most of what ends up on this blog.",
-      "I'm also genuinely interested in the history of the open source movement: the people, the arguments, and the decisions that shaped the software we all rely on. Figures like Linus Torvalds and projects like GNU come up often in what I read and write about, not as trivia, but because understanding where a tool came from usually explains a lot about how and why it works the way it does today.",
-      'This site is bilingual, in English and in Portuguese, and every post exists in both languages. Thanks for stopping by.',
-    ].join('\n\n'),
     'footer.tagline': 'Written by hand in Porto Alegre.',
     'footer.rights': 'All rights reserved.',
     'footer.source': 'Source',
@@ -96,12 +89,6 @@ export const ui = {
     'about.title': 'Sobre',
     'about.description':
       'Gabriel Franco: estudante de ciência da computação na PUCRS, interessado em como o software realmente funciona e na história do open source.',
-    'about.body': [
-      'Olá, eu sou o Gabe — Gabriel Franco. Sou estudante de ciência da computação na PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul), e este blog é onde registro as coisas que vou aprendendo e pensando pelo caminho.',
-      'Eu me importo bastante com ciência da computação como área, não só como um conjunto de ferramentas para lançar produtos. Tenho um jeito bem específico de fazer as coisas: prefiro entender um sistema de verdade a decorar os passos para fazê-lo funcionar, e costumo desacelerar de propósito para descobrir o que realmente está acontecendo por baixo dos panos — em um compilador, em um sistema operacional, no runtime de uma linguagem, seja lá o que for. Esse hábito molda a maior parte do que acaba virando post aqui.',
-      'Também tenho um interesse genuíno pela história do movimento open source: as pessoas, os debates e as decisões que moldaram o software do qual todos dependemos. Figuras como Linus Torvalds e projetos como o GNU aparecem com frequência no que leio e escrevo, não como curiosidade, mas porque entender de onde uma ferramenta veio costuma explicar bastante sobre como e por que ela funciona do jeito que funciona hoje.',
-      'Este site é bilíngue, em inglês e em português, e todo post existe nos dois idiomas. Obrigado pela visita.',
-    ].join('\n\n'),
     'footer.tagline': 'Escrito à mão em Porto Alegre.',
     'footer.rights': 'Todos os direitos reservados.',
     'footer.source': 'Código-fonte',

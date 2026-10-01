@@ -18,9 +18,15 @@ interface Props {
   image?: string;
   /** Keep the page out of search engines (used for draft posts). */
   noindex?: boolean;
+  /**
+   * This page's path in each language, for pages whose path isn't the same
+   * across languages (the about page). Defaults to swapping the /<lang> prefix.
+   */
+  alternates?: Partial<Record<Lang, string>>;
 }
 
-const { title, description, lang, noindex } = Astro.props;
+const { title, description, lang, noindex, alternates = {} } = Astro.props;
+const alternatePath = (target: Lang) => alternates[target] ?? getLocalizedPath(Astro.url.pathname, target);
 const image = Astro.props.image && existsSync(`public${Astro.props.image}`) ? Astro.props.image : '/logo.png';
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -34,8 +40,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="alternate icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" hreflang="en" href={new URL(getLocalizedPath(Astro.url.pathname, 'en'), Astro.site)} />
-    <link rel="alternate" hreflang="pt-BR" href={new URL(getLocalizedPath(Astro.url.pathname, 'pt'), Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(alternatePath('en'), Astro.site)} />
+    <link rel="alternate" hreflang="pt-BR" href={new URL(alternatePath('pt'), Astro.site)} />
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -82,7 +88,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body class="flex min-h-screen flex-col bg-bg font-sans text-text antialiased selection:bg-primary selection:text-white">
-    <Header lang={lang} />
+    <Header lang={lang} langSwitchHref={alternates[lang === 'en' ? 'pt' : 'en']} />
     <main class="flex-1">
       <slot />
     </main>
