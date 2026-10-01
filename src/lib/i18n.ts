@@ -19,7 +19,7 @@ export const ui = {
     'nav.menu': 'Menu',
     'lang.switch': 'Switch language',
     'theme.switch': 'Toggle color theme',
-    'hero.kicker': "Gabriel Franco's notes",
+    'hero.kicker': "Computer Science in Real Life",
     'hero.title': 'Building things, and figuring out how they work.',
     'hero.subtitle':
       "Notes on computer science, systems, and the open source projects that shaped how I think about software. I'm Gabriel Franco — welcome.",
@@ -62,7 +62,7 @@ export const ui = {
     'nav.menu': 'Menu',
     'lang.switch': 'Mudar idioma',
     'theme.switch': 'Alternar tema',
-    'hero.kicker': 'Anotações do Gabriel Franco',
+    'hero.kicker': 'Ciência da Computação na Vida Real',
     'hero.title': 'Construindo coisas e entendendo como elas funcionam.',
     'hero.subtitle':
       'Notas sobre ciência da computação, sistemas e os projetos open source que moldaram a forma como penso sobre software. Eu sou o Gabriel Franco — seja bem-vindo.',
