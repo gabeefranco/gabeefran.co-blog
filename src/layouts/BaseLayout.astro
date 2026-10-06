@@ -44,6 +44,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     {Object.entries(alternates).map(([altLang, path]) => (
       <link rel="alternate" hreflang={HREFLANGS[altLang as Lang]} href={new URL(path, Astro.site)} />
     ))}
+    <link rel="alternate" hreflang="x-default" href="https://gabeefran.co/" />
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 

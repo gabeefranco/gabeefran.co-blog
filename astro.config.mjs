@@ -14,7 +14,6 @@ import { readPostFiles } from './src/lib/post-files.ts';
 // (Astro can't express this as a dynamic redirect in a static build: the
 // destination must be an existing route with the same params.)
 const LEGACY_EN_PATHS = [
-  '/',
   '/about',
   '/posts',
   '/posts/hello-world',
@@ -39,11 +38,6 @@ const DRAFT_PATHS = readPostFiles()
 // https://astro.build/config
 export default defineConfig({
   site: 'https://gabeefran.co',
-
-  // No `i18n` block on purpose: locales come from src/lib/i18n.ts and every
-  // locale, English included, lives under src/pages/[lang]/. Astro's i18n
-  // routing would add middleware that 404s the unprefixed on-demand
-  // /page-card and /social-card routes (prefix-always) or /en/* (default).
 
   redirects: Object.fromEntries(LEGACY_EN_PATHS.map((path) => [path, path === '/' ? '/en' : `/en${path}`])),
 

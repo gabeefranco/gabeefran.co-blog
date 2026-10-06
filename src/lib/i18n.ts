@@ -16,6 +16,9 @@ export const HREFLANGS: Record<Lang, string> = {
   pt: 'pt-BR',
 };
 
+export const SUPPORTED = ["pt", "en"] as const;
+export const DEFAULT = "en";
+
 export const ui = {
   en: {
     'site.name': 'gabeefranco',
@@ -178,4 +181,22 @@ export function postPath(lang: Lang, slug: string): string {
 /** Path of the same page in each language, for pages that exist in every language. */
 export function localizedAlternates(pathname: string): Record<Lang, string> {
   return Object.fromEntries(LANGS.map((lang) => [lang, getLocalizedPath(pathname, lang)])) as Record<Lang, string>;
+}
+
+export function pickLocale(header: string | null): string {
+  if (!header) return DEFAULT;
+
+  // "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7" -> [{tag:"pt", q:1}, ...]
+  const prefs = header
+    .split(",")
+    .map((part) => {
+      const [tag, ...params] = part.trim().split(";");
+      const qParam = params.find((p) => p.trim().startsWith("q="));
+      const q = qParam ? parseFloat(qParam.split("=")[1]) : 1;
+      return { lang: tag.toLowerCase().split("-")[0], q: isNaN(q) ? 0 : q };
+    })
+    .filter((p) => p.q > 0)
+    .sort((a, b) => b.q - a.q);
+
+  return prefs.find((p) => (SUPPORTED as readonly string[]).includes(p.lang))?.lang ?? DEFAULT;
 }
