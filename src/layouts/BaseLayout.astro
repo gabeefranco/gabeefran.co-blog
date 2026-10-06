@@ -4,7 +4,7 @@ import { Font } from 'astro:assets';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getLocalizedPath, type Lang } from '../lib/i18n';
+import { HREFLANGS, localizedAlternates, type Lang } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -18,9 +18,16 @@ interface Props {
   image?: string;
   /** Keep the page out of search engines (used for draft posts). */
   noindex?: boolean;
+  /**
+   * This page in each language it exists in, for hreflang links and the
+   * language switcher. Defaults to the same path under every language; pages
+   * whose URL differs per language (posts) or that may be missing in some
+   * language (posts, tags) pass their own.
+   */
+  alternates?: Partial<Record<Lang, string>>;
 }
 
-const { title, description, lang, noindex } = Astro.props;
+const { title, description, lang, noindex, alternates = localizedAlternates(Astro.url.pathname) } = Astro.props;
 const image = Astro.props.image && existsSync(`public${Astro.props.image}`) ? Astro.props.image : '/logo.png';
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -34,8 +41,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="alternate icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" hreflang="en" href={new URL(getLocalizedPath(Astro.url.pathname, 'en'), Astro.site)} />
-    <link rel="alternate" hreflang="pt-BR" href={new URL(getLocalizedPath(Astro.url.pathname, 'pt'), Astro.site)} />
+    {Object.entries(alternates).map(([altLang, path]) => (
+      <link rel="alternate" hreflang={HREFLANGS[altLang as Lang]} href={new URL(path, Astro.site)} />
+    ))}
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -82,7 +90,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body class="flex min-h-screen flex-col bg-bg font-sans text-text antialiased selection:bg-primary selection:text-white">
-    <Header lang={lang} />
+    <Header lang={lang} alternates={alternates} />
     <main class="flex-1">
       <slot />
     </main>

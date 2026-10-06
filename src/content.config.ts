@@ -1,11 +1,16 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-// Each post lives twice: src/content/posts/en/<slug>.mdx and
-// src/content/posts/pt/<slug>.mdx. The loader id is "<lang>/<slug>",
-// which is how we pair up translations and derive routes.
+// Posts live at src/content/posts/<lang>/<file>.mdx. The entry id is always
+// that path ("<lang>/<file>"), never the frontmatter slug: the language comes
+// from the folder, and a post and its translation share the same filename.
+// The URL is /<lang>/posts/<slug>, so each translation picks its own slug.
 const posts = defineCollection({
-  loader: glob({ pattern: '**/*.mdx', base: './src/content/posts' }),
+  loader: glob({
+    pattern: '**/*.mdx',
+    base: './src/content/posts',
+    generateId: ({ entry }) => entry.replace(/\.mdx$/, ''),
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

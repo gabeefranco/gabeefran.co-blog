@@ -4,13 +4,13 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostLayout from '../../../layouts/PostLayout.astro';
 import ObservationCard from '../../../components/ObservationCard';
 import { LANGS, useTranslations, type Lang } from '../../../lib/i18n';
-import { getPostsByLang, slugOf, estimateReadingMinutes } from '../../../lib/posts';
+import { estimateReadingMinutes, getPostAlternates, getPostsByLang } from '../../../lib/posts';
 import { postCardPath } from '../../../lib/social-cards';
 
 export async function getStaticPaths() {
   const pathsByLang = await Promise.all(
     LANGS.map(async (lang) =>
-      (await getPostsByLang(lang, { includeDrafts: true })).map((post) => ({ params: { lang, slug: slugOf(post) }, props: { post } })),
+      (await getPostsByLang(lang, { includeDrafts: true })).map((post) => ({ params: { lang, slug: post.data.slug }, props: { post } })),
     ),
   );
   return pathsByLang.flat();
@@ -21,14 +21,16 @@ const t = useTranslations(lang);
 const { post } = Astro.props;
 const { Content } = await render(post);
 const readingMinutes = estimateReadingMinutes(post.body ?? '');
+const alternates = await getPostAlternates(post);
 ---
 
 <BaseLayout
   title={`${post.data.title} — ${t('site.name')}`}
   description={post.data.description}
   lang={lang}
-  image={postCardPath(lang, slugOf(post))}
+  image={postCardPath(lang, post.data.slug)}
   noindex={post.data.draft}
+  alternates={alternates}
 >
   <PostLayout post={post} lang={lang} readingMinutes={readingMinutes}>
     <Content components={{ ObservationCard }} />

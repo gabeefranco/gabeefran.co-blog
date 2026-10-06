@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
 import { getLocalizedPath, langPaths, useTranslations, type Lang } from '../../lib/i18n';
-import { getPostsByLang, slugOf } from '../../lib/posts';
+import { getPostsByLang, postHref } from '../../lib/posts';
 
 export const getStaticPaths = langPaths;
 
@@ -18,7 +18,7 @@ export async function GET(context: APIContext) {
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
-      link: `${getLocalizedPath(`/posts/${slugOf(post)}`, lang)}/`,
+      link: `${postHref(post)}/`,
     })),
   });
 }

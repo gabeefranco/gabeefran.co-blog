@@ -4,9 +4,11 @@ import { getLocalizedPath, LANG_LABELS, useTranslations, type Lang } from '../li
 
 interface Props {
   lang: Lang;
+  /** See BaseLayout. */
+  alternates: Partial<Record<Lang, string>>;
 }
 
-const { lang } = Astro.props;
+const { lang, alternates } = Astro.props;
 const t = useTranslations(lang);
 const otherLang: Lang = lang === 'en' ? 'pt' : 'en';
 
@@ -14,7 +16,8 @@ const pathname = Astro.url.pathname;
 const homeHref = getLocalizedPath('/', lang);
 const postsHref = getLocalizedPath('/posts', lang);
 const aboutHref = getLocalizedPath('/about', lang);
-const langSwitchHref = getLocalizedPath(pathname, otherLang);
+// Not everything is translated: fall back to the other language's home page.
+const langSwitchHref = alternates[otherLang] ?? getLocalizedPath('/', otherLang);
 
 const navLinks = [
 { href: homeHref, label: t('nav.home'), id: 'home' },

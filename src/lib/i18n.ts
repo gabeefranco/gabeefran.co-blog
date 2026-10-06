@@ -10,6 +10,12 @@ export const LANG_LABELS: Record<Lang, string> = {
   pt: 'Português',
 };
 
+/** hreflang values for <link rel="alternate">. */
+export const HREFLANGS: Record<Lang, string> = {
+  en: 'en',
+  pt: 'pt-BR',
+};
+
 export const ui = {
   en: {
     'site.name': 'gabeefranco',
@@ -162,4 +168,14 @@ export function getLocalizedPath(pathname: string, lang: Lang): string {
   const [, first] = pathname.split('/');
   const stripped = (isLang(first) ? pathname.slice(first.length + 1) : pathname) || '/';
   return stripped === '/' ? `/${lang}` : `/${lang}${stripped}`;
+}
+
+/** Every language has its own slug for a post, so post URLs aren't derivable from each other. */
+export function postPath(lang: Lang, slug: string): string {
+  return `/${lang}/posts/${slug}`;
+}
+
+/** Path of the same page in each language, for pages that exist in every language. */
+export function localizedAlternates(pathname: string): Record<Lang, string> {
+  return Object.fromEntries(LANGS.map((lang) => [lang, getLocalizedPath(pathname, lang)])) as Record<Lang, string>;
 }

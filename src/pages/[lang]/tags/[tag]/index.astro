@@ -2,7 +2,7 @@
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import PostsContent from '../../../../components/PostsContent.astro';
 import { LANGS, tagPageMeta, useTranslations, type Lang } from '../../../../lib/i18n';
-import { getAllTags } from '../../../../lib/posts';
+import { getAllTags, getTagAlternates } from '../../../../lib/posts';
 import { tagCardPath } from '../../../../lib/social-cards';
 
 export async function getStaticPaths() {
@@ -16,8 +16,9 @@ const lang = Astro.params.lang as Lang;
 const tag = Astro.params.tag!;
 const t = useTranslations(lang);
 const page = tagPageMeta(lang, tag);
+const alternates = await getTagAlternates(tag);
 ---
 
-<BaseLayout title={`${page.title} — ${t('site.name')}`} description={page.description} lang={lang} image={tagCardPath(lang, tag)}>
+<BaseLayout title={`${page.title} — ${t('site.name')}`} description={page.description} lang={lang} image={tagCardPath(lang, tag)} alternates={alternates}>
   <PostsContent lang={lang} tag={tag} />
 </BaseLayout>

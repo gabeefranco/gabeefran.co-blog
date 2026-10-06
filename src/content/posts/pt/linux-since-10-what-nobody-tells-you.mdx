@@ -1,15 +1,14 @@
 ---
 title: "Eu Uso Linux Desde os Meus 10 Anos de Idade: Aqui Está o Que Ninguém te Conta"
-description: "ainda não tem descrição"
-slug: "pt-linux-since-10-what-nobody-tells-you"
-pubDate: 2026-09-30
-tags: ["draft"]
-seoKeywords:  ""
-draft: true
+description: "Comecei no Linux aos 10 anos, num dual boot no PC do meu pai. Conto o que aprendi quebrando o sistema e dou 3 dicas pra quem está começando agora."
+pubDate: 2026-10-06
+tags: ["linux", "life"]
+seoKeywords: "aprender Linux, Linux para iniciantes, como começar a usar Linux, dual boot Ubuntu e Windows, terminal Linux, gerenciador de pacotes, migrar do Windows para o Linux"
+slug: "uso-linux-desde-meus-10-anos-o-que-ninguem-te-conta"
 language: "pt"
 ---
 
-Quando eu comecei a programar, ouvi dizer que pra aprender programação de verdade tem que usar Linux. Eu simplesmente fui lá e segui essa dica à risca. Instalei o Ubuntu 18.04 em dual boot com o Windows 7, e a partir daí nunca mais pensei da mesma forma.
+Eu tinha 10 anos quando passei duas horas achando que tinha apagado todos os arquivos do PC do meu pai. Tudo isso porque eu queria instalar o Ubuntu 18.04 em *dual boot* com o Windows 7. No fim, não tinha apagado nada, e a partir daí nunca mais pensei da mesma forma.
 
 Nesse post, quero compartilhar um pouco da minha experiência, e dar algumas dicas pra quem está começando agora ou quer começar em breve. 
 
@@ -19,32 +18,70 @@ Tudo começa em maio de 2018. Eu tinha 10 anos de idade e já sabia que gostava 
 
 Ele queria que eu comprasse um livro de literatura mesmo, de histórias com início, meio e fim. Eu, por outro lado, queria comprar um livro que me ensinasse alguma coisa nova, dentro dos meus interesses. Concordamos em levar um de cada. Eu escolhi ["Programação em Python 3"](https://www.estantevirtual.com.br/livro/programacao-em-python-3-0FS-0355-000-BK), do [Mark Summerfield](https://mark-summerfield.github.io/index.html).
 
-Meu pai tinha um PC que ele raramente usava. Na verdade, quem usava era eu, pra aprender programação e praticar o conteúdo do livro. Tinha um AMD Athlon, já ultrapassado mesmo naquela época, e rodava Windows 7. Conseguia programar, mas era meio lento. Além disso, eu era muito de pesquisar na internet, principalmente no YouTube, por dicas sobre assuntos que eu gostava. Assim, numa dessas pesquisas, vi alguns vídeos que diziam que Linux era melhor pra programar e aprender sobre informática e computação. Ouvi que tinha ferramentas melhores e era mais prático. Então já fui logo pesquisar como instalar, e depois de muito tempo tentando e me perguntando se tinha apagado os arquivos do meu pai, consegui colocar o Ubuntu ao lado do Windows 7 sem perder nada.
+Meu pai tinha um PC que ele raramente usava. Na verdade, quem usava era eu, pra aprender programação e praticar o conteúdo do livro. Tinha um AMD Athlon, já ultrapassado mesmo naquela época, e rodava Windows 7. Conseguia programar, mas era meio lento. Além disso, eu era muito de pesquisar na internet, principalmente no YouTube, por dicas sobre assuntos que eu gostava. 
 
-## A real vantagem do Linux
+Assim, numa dessas pesquisas, vi alguns vídeos que diziam que Linux era melhor pra programar e aprender sobre informática e computação. Ouvi dizer que tinha ferramentas melhores e era mais prático. Então já fui logo pesquisar como instalar, e depois de muito tempo tentando e me perguntando se tinha apagado os arquivos do meu pai, consegui colocar o Ubuntu ao lado do Windows 7 sem perder nada.
 
-Depois de algum tempo nesse mundo, percebi que a maior vantagem de ter escolhido o Linux não foi a praticidade, nem nada parecido. Foi aprender na marra sobre como um sistema operacional funciona, e como consertar coisas que dão errado. 
+## Os perrengues (e a real vantagem)
 
-cotinuar ....
+Depois de algum tempo nesse mundo, percebi que a maior vantagem de ter escolhido o Linux não foi a praticidade, nem nada parecido. **Foi aprender na marra sobre como um sistema operacional funciona, e como consertar coisas que dão errado.** 
+
+Até porque muita coisa deu errado.
+
+Primeiramente, ainda quando estava tentando instalar o sistema, pensei que tinha formatado a partição do Windows. Graças a Deus não era esse o problema, mas até eu descobrir isso se foram umas duas horas. No fim, chamamos o Enéas, que era o herói da minha família quando se tratava de informática. 
+
+Era ele quem chamávamos quando precisávamos de algum conserto, manutenção ou *upgrade* nos computadores da minha mãe e do meu pai. Chegando lá, ele avaliou a situação e me mostrou que eu não tinha apagado a partição, mas o GRUB (*bootloader* comum em várias distros Linux) não reconhecia a partição do Windows. Então, ele me ensinou a trocar a ordem de boot pela BIOS mesmo, e, no final, deu tudo certo. 
+
+Muito obrigado, Enéas! Além de ser o nosso herói, você era uma das únicas pessoas com quem eu podia falar sobre meus aprendizados computacionais, então deve se lembrar que eu falava bem mais do que o necessário quando aparecia lá em casa. Pra nós, "caras da TI" apaixonados pelo que fazem, às vezes isso é só o que precisamos. 
+
+Mas eu não me desmotivei por ter precisado de ajuda. Na verdade, eu queria ser o cara que ajudaria alguém algum dia. Por isso, continuei tentando, e aprendi muito a cada vez que dava problema.
+
+Outra situação que ocorreu era que o sistema simplesmente não reconhecia meu adaptador de Wi-Fi da TP-Link. Não sei se era porque eu esqueci de ativar o módulo do kernel, ou se faltou algum pacote, ou se realmente não tinha driver pra esse adaptador. Depois de um tempo, passamos cabos de rede pela casa e aí eu não precisava mais do adaptador. Então, esqueci desse problema. 
+
+Só sei que, hoje em dia, às vezes preciso desse adaptador no meu PC, e ele funciona *plug-and-play*. Não sei se esse driver agora vem no kernel Linux por padrão ou se eu que aprendi a configurar direito. Mas enfim, problema resolvido, mesmo que alguns anos depois.
+
+E eu acho que é esse tipo de perrengue que te faz aprender. Até hoje não encontrei nenhum jeito melhor de entender, na prática, como funciona um computador e seu sistema operacional. É colocando a mão na massa e errando que vamos entendendo, e **nenhum sistema te deixa tão livre pra praticar e errar quanto o Linux.**
 
 ## Acho que eu sei como posso te ajudar
 
-Dar dicas sobre como se adaptar melhor ao linux, tirando o mindset do windows da cabeça, comparando com como as coisas são no windows. A finalidade é ajudar o eleitor a se acostumar mais rápido. Falar com o leitor em segunda pessoa nessa seção.
+O processo de aprendizado exige um pouco de fricção. Tem que ter tentativa e erro. Mas o que eu posso fazer pra ajudar você, que está começando, é te dar algumas informações pra diminuir a dor de cabeça. O que vou falar agora é pra que você se prepare para o que está por vir. Assim, espero que consiga se acostumar mais rápido e aprender mais.
 
-### Entenda o terminal
+**O principal é tirar o "jeito Windows de resolver as coisas" da sua cabeça.** É outro sistema operacional, então as coisas são feitas de outro jeito. Muita coisa é reaproveitável, sim. Mas esteja pronto pra pensar de um jeito diferente.
 
-Falar que o terminal não é a única opção, mas falar sobre a importância de saber fazer as coisas pela linha de comando.
+Aqui vão 3 dicas sobre as principais diferenças do Linux pro Windows.
 
-### Entenda o gerenciamento de pacotes
+### 1. Entenda o terminal
 
-Falar sobre o que é gerenciamento de pacotes, como ele funciona no windows, e como funciona nas distros linux.
+No Windows, estamos acostumados a fazer tudo pela interface gráfica. Até porque lá tem uma GUI (interface gráfica de usuário) pra tudo. Não é como se no Linux não tivesse, mas o jeito padrão e mais rápido de navegar pelo sistema é pela linha de comando. Usando a interface gráfica, te garanto que vai aprender muito pouco.
 
-### Entenda os drivers
+Essa tela preta com letras brancas e fonte monoespaçada pode parecer intimidadora no começo. Mas juro que não é tão difícil se acostumar. Recomendo abrir o terminal, entender sobre como funciona o seu shell, os comandos básicos (`ls`, `cd`, `cp`, `mv`, `rm`, `cat`, etc.) e como navegar apenas pela linha de comando. Teste tudo num ambiente seguro, onde não tenha medo de estragar tudo. Vá pesquisando sobre como executar suas tarefas do dia a dia. Te garanto, tem comando pra qualquer coisa que queira fazer. 
 
-Falar sobre minha experiência com os drivers de wifi como exemplo
+### 2. Entenda o gerenciamento de pacotes
 
+Gerenciamento de pacotes é algo com o qual não estamos acostumados em ambientes Windows. Lá, ele praticamente não existe da forma que existe nos sistemas operacionais como o Linux. 
+
+Quando quiser baixar um programa, se acostume a não procurar por um executável na internet. Aprenda a pesquisar por programas no gerenciador de pacotes da sua distribuição e instalar programas por ele.
+
+Lembra daquela pasta `C:\Arquivos de Programas`? No Windows, ela centraliza todos os arquivos necessários para que seus programas rodem corretamente. Já no Linux, os arquivos ficam separados em várias pastas, e o sistema sabe onde os encontrar. Binários em `/bin` ou `/usr/bin`, bibliotecas compartilhadas em `/usr/lib`, e por aí vai. O que o gerenciador de pacotes faz é extrair o pacote que você quer baixar e colocar cada arquivo no seu devido lugar, automaticamente. 
+
+E cada distribuição tem um sistema de pacotes diferente. Debian usa o `dpkg` e o `apt`, distros da família Red Hat (Fedora, RHEL, Rocky) usam o `rpm` e o `dnf`, e o Arch usa o `pacman`. Cada um tem um jeito de funcionar levemente diferente, então pesquisa sobre o que a sua distro usa e aprende ele.
+
+### 3. Entenda a resolução de problemas
+
+Isso é o mais importante. **No Linux, tudo que dá erro se explica.** Quando tem um crash ou algo dá errado, pode ter certeza que em algum lugar tem um log explicando o que aconteceu. 
+
+O processo de resolução de problemas sempre envolve olhar os logs, consertar o que deu errado e tentar de novo. Não tem muito segredo quando não se sabe o que fazer. Jogando no Google ou na IA, vai achar um monte de post de fórum, onde outra pessoa explica que teve o mesmo problema e pede ajuda. Às vezes tem resposta, e às vezes não. Só tenha certeza que está olhando nos fóruns certos. Não adianta querer resolver um problema no Ubuntu, seguindo um passo a passo obtido do fórum do Arch Linux.
+
+Essa parte de pesquisar em fóruns é muito real. É boa parte de como se aprende. Mas **não se esqueça de pesquisar sobre o que os comandos fazem antes de executar**, porque aí mora um problema de segurança. Alguém pode simplesmente colocar um comando malicioso pra galera executar. E além da segurança, se estamos usando Linux pra aprender algo, é bom que a gente saiba por que fazemos o que fazemos.
+
+Aquela vez que o adaptador de Wi-Fi não funcionou, passei muito tempo procurando a resposta em fóruns. Naquele caso, demorou um tempo pra que o problema fosse resolvido. Mas com certeza valeu a pena, porque aprendi muita coisa nova no processo.
 
 ## Enfim...
 
-Conclusão.
+Já se passaram oito anos desde aquele dual boot no PC do meu pai, e eu continuo usando Linux todos os dias. Mudei de distro algumas vezes, quebrei o sistema mais vezes do que gostaria e, sinceramente, ainda quebro de vez em quando. A diferença é que hoje eu sei por onde começar a procurar o problema.
 
+E é isso que ninguém te conta. **O Linux não vai te deixar mais produtivo logo de cara.** No começo, você vai perder tempo com coisa que no Windows seria um clique. Vai ficar uma tarde inteira tentando fazer o Wi-Fi funcionar, ou achando que apagou os arquivos de alguém. Mas cada um desses perrengues te ensina alguma coisa que nenhum curso ou livro ensina do mesmo jeito. Quando você vê, já entende de partições, bootloader, módulos do kernel e permissões, sem nunca ter sentado pra estudar isso formalmente.
+
+Lembra que eu disse que queria ser o cara que ajudaria alguém algum dia? Esse post é um pouco disso. Se você está pensando em começar, *comece*. Faça num ambiente onde não tenha medo de errar, leia os logs, pesquise antes de rodar qualquer comando e, principalmente, não desanime quando precisar pedir ajuda. Eu precisei, e foi aí que eu mais aprendi.
+
+E se algo der muito errado, bom, todo mundo precisa de um Enéas de vez em quando. Fico à disposição.

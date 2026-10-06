@@ -1,0 +1,87 @@
+---
+title: "I've Been Using Linux Since I Was 10: Here's What Nobody Tells You"
+description: "I started using Linux at 10, dual booting my dad's PC. Here's what I learned breaking the system, plus 3 tips for anyone just getting started."
+pubDate: 2026-10-06
+tags: ["linux", "life"]
+seoKeywords: "learn Linux, Linux for beginners, how to start using Linux, Ubuntu and Windows dual boot, Linux terminal, package manager, switch from Windows to Linux"
+slug: "using-linux-since-i-was-10-what-nobody-tells-you"
+language: "en"
+---
+
+I was 10 when I spent two hours thinking I'd deleted every file on my dad's PC. All because I wanted to install Ubuntu 18.04 in a *dual boot* with Windows 7. In the end, I hadn't deleted anything, and from then on I never thought the same way again.
+
+In this post, I want to share a bit of my experience and give some tips to anyone who's just starting out or wants to start soon.
+
+## A bit of my story
+
+It all starts in May 2018. I was 10 years old and already knew I really loved tech, and I was super into computers and video editing. The starting point was my dad, who took me to a bookstore here in Porto Alegre to pick out a book, since he wanted me to get back into reading. He's always been the biggest [early adopter](https://en.wikipedia.org/wiki/Technology_adoption_life_cycle) of every new phase in my life, and he still is.
+
+He wanted me to buy an actual literature book, a story with a beginning, a middle and an end. I, on the other hand, wanted a book that would teach me something new, something I was into. We agreed to get one of each. I picked ["Programming in Python 3"](https://www.informit.com/store/programming-in-python-3-a-complete-introduction-to-9780132651653), by [Mark Summerfield](https://mark-summerfield.github.io/index.html).
+
+My dad had a PC he barely used. Actually, I was the one using it, to learn programming and practice what the book taught. It had an AMD Athlon, already outdated even back then, and ran Windows 7. I could code on it, but it was kind of slow. On top of that, I was always searching the internet, especially YouTube, for tips on the stuff I liked.
+
+So, during one of those searches, I came across some videos saying Linux was better for programming and for learning about computers and computing. I heard it had better tools and was more practical. So I immediately looked up how to install it, and after a long time trying and wondering whether I'd wiped my dad's files, I managed to put Ubuntu right next to Windows 7 without losing anything.
+
+## The struggles (and the real upside)
+
+After some time in this world, I realized the biggest advantage of choosing Linux wasn't practicality or anything like that. **It was learning the hard way how an operating system works, and how to fix things when they go wrong.**
+
+Because a lot of things went wrong.
+
+First, while I was still trying to install the system, I thought I had formatted the Windows partition. Thank God that wasn't the problem, but it took me about two hours to figure that out. In the end, we called Enéas, who was my family's hero when it came to computers.
+
+He was the one we called whenever we needed a repair, maintenance or an *upgrade* on my mom's and dad's computers. When he got there, he looked things over and showed me that I hadn't deleted the partition; GRUB (a *bootloader* common in many Linux distros) just wasn't detecting the Windows partition. So he taught me how to change the boot order straight from the BIOS, and in the end, everything worked out.
+
+Thank you so much, Enéas! Besides being our hero, you were one of the only people I could talk to about what I was learning about computers, so you probably remember that I talked way more than necessary whenever you came over. For us "IT guys" who are passionate about what we do, sometimes that's all we need.
+
+But I didn't get discouraged because I needed help. Actually, I wanted to be the guy who'd help someone someday. So I kept trying, and I learned a lot every time something broke.
+
+Another thing that happened was that the system just wouldn't recognize my TP-Link Wi-Fi adapter. I don't know if it was because I forgot to enable the kernel module, or if some package was missing, or if there really was no driver for that adapter. After a while, we ran network cables through the house, and then I didn't need the adapter anymore. So I forgot about that problem.
+
+All I know is that nowadays I sometimes need that adapter on my PC, and it works *plug-and-play*. I don't know if that driver now ships with the Linux kernel by default or if I just learned how to set it up properly. But anyway, problem solved, even if it took a few years.
+
+And I think it's this kind of struggle that makes you learn. To this day, I haven't found a better way to understand, in practice, how a computer and its operating system work. It's by getting your hands dirty and making mistakes that we start to understand, and **no system gives you as much freedom to practice and make mistakes as Linux.**
+
+## I think I know how I can help you
+
+The learning process needs a bit of friction. There has to be trial and error. But what I can do to help you, if you're just starting out, is give you some info to cut down on the headaches. What I'm about to say is meant to prepare you for what's coming. That way, I hope you'll get used to it faster and learn more.
+
+**The main thing is to get the "Windows way of doing things" out of your head.** It's a different operating system, so things are done differently. A lot of what you know carries over, sure. But be ready to think differently.
+
+Here are 3 tips on the main differences between Linux and Windows.
+
+### 1. Understand the terminal
+
+On Windows, we're used to doing everything through the graphical interface. After all, there's a GUI (graphical user interface) for everything there. It's not like Linux doesn't have one, but the default and fastest way to get around the system is the command line. If you stick to the graphical interface, I promise you'll learn very little.
+
+That black screen with white letters and a monospaced font can seem intimidating at first. But I swear it's not that hard to get used to. I recommend opening the terminal and learning how your shell works, the basic commands (`ls`, `cd`, `cp`, `mv`, `rm`, `cat`, etc.) and how to get around using only the command line. Test everything in a safe environment, where you're not afraid of breaking everything. Keep looking up how to do your everyday tasks. Trust me, there's a command for anything you want to do.
+
+### 2. Understand package management
+
+Package management is something we're not used to in Windows environments. There, it basically doesn't exist the way it does in operating systems like Linux.
+
+When you want to download a program, get used to not hunting for an executable on the internet. Learn to search for programs in your distribution's package manager and install them through it.
+
+Remember that `C:\Program Files` folder? On Windows, it centralizes all the files your programs need to run properly. On Linux, though, files are spread across several folders, and the system knows where to find them. Binaries in `/bin` or `/usr/bin`, shared libraries in `/usr/lib`, and so on. What the package manager does is unpack the package you want to install and put each file in its proper place, automatically.
+
+And each distribution has a different package system. Debian uses `dpkg` and `apt`, Red Hat family distros (Fedora, RHEL, Rocky) use `rpm` and `dnf`, and Arch uses `pacman`. Each one works a little differently, so look up what your distro uses and learn it.
+
+### 3. Understand troubleshooting
+
+This is the most important one. **On Linux, every error has an explanation.** When something crashes or goes wrong, you can be sure there's a log somewhere explaining what happened.
+
+Troubleshooting always comes down to checking the logs, fixing what went wrong and trying again. There's not much of a secret when you don't know what to do. Throw it into Google or an AI and you'll find a ton of forum posts where someone else explains they had the same problem and asks for help. Sometimes there's an answer, and sometimes there isn't. Just make sure you're looking at the right forums. There's no point trying to fix a problem on Ubuntu by following a step-by-step guide from the Arch Linux forum.
+
+This forum-digging part is very real. It's a big part of how you learn. But **don't forget to look up what commands do before running them**, because that's where a security problem lies. Someone could just post a malicious command for people to run. And beyond security, if we're using Linux to learn something, it's good to know why we do what we do.
+
+That time the Wi-Fi adapter didn't work, I spent a lot of time looking for the answer on forums. In that case, it took a while for the problem to get solved. But it was definitely worth it, because I learned a lot of new stuff along the way.
+
+## Anyway...
+
+Eight years have passed since that dual boot on my dad's PC, and I still use Linux every day. I've switched distros a few times, broken the system more times than I'd like and, honestly, I still break it every now and then. The difference is that now I know where to start looking for the problem.
+
+And that's what nobody tells you. **Linux isn't going to make you more productive right off the bat.** At first, you'll waste time on stuff that would be one click on Windows. You'll spend a whole afternoon trying to get the Wi-Fi working, or thinking you deleted someone's files. But each of those struggles teaches you something no course or book teaches in quite the same way. Before you know it, you understand partitions, bootloaders, kernel modules and permissions, without ever sitting down to study them formally.
+
+Remember how I said I wanted to be the guy who'd help someone someday? This post is a bit of that. If you're thinking about starting, *start*. Do it in an environment where you're not afraid to make mistakes, read the logs, research before running any command and, above all, don't get discouraged when you need to ask for help. I did, and that's when I learned the most.
+
+And if something goes really wrong, well, everybody needs an Enéas every now and then. I'm here if you need me.

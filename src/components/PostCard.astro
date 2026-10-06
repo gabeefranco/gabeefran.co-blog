@@ -1,6 +1,6 @@
 ---
 import type { PostEntry } from '../lib/posts';
-import { slugOf, formatDate } from '../lib/posts';
+import { formatDate, postHref } from '../lib/posts';
 import { getLocalizedPath, type Lang } from '../lib/i18n';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { post, lang } = Astro.props;
-const href = getLocalizedPath(`/posts/${slugOf(post)}`, lang);
+const href = postHref(post);
 const tagsHref = (tag: string) => getLocalizedPath(`/tags/${tag}`, lang);
 ---
 

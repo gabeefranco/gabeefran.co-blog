@@ -7,27 +7,19 @@
 //
 // Needs CF_ACCOUNT_ID and CF_API_TOKEN (read from .env), and the
 // /social-card and /page-card routes must be deployed at BASE_URL.
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { LANGS, pageMeta, tagPageMeta, type Lang, type PageKey } from '../src/lib/i18n.ts';
+import { readPostFiles, type PostFile } from '../src/lib/post-files.ts';
 import { pageCardPath, postCardPath, tagCardPath } from '../src/lib/social-cards.ts';
 
 const BASE_URL = process.env.SOCIAL_CARD_BASE_URL ?? 'https://gabeefran.co';
 const CF_API = 'https://api.cloudflare.com/client/v4/accounts';
-const POSTS_DIR = 'src/content/posts';
 // 404.html is prerendered once, in English (see src/pages/404.astro).
 const LANG_PAGES: Record<Lang, PageKey[]> = {
   en: ['home', 'posts', 'about', '404'],
   pt: ['home', 'posts', 'about'],
 };
-
-interface Post {
-  lang: Lang;
-  slug: string;
-  title: string;
-  description?: string;
-  tags: string[];
-}
 
 interface Card {
   /** Path under public/, e.g. /social-cards/en/hello-world.png */
@@ -37,38 +29,7 @@ interface Card {
   params: Record<string, string>;
 }
 
-function getFrontmatterField(content: string, field: string): string | null {
-  const match = content.match(new RegExp(`^${field}:\\s*"?([^"\\n]+)"?`, 'm'));
-  return match ? match[1].trim() : null;
-}
-
-/** Reads an inline tag list, e.g. `tags: ["meta", "blogging"]`. */
-function getFrontmatterTags(content: string): string[] {
-  const list = content.match(/^tags:\s*\[([^\]]*)\]/m)?.[1] ?? '';
-  return [...list.matchAll(/["']([^"']+)["']/g)].map((m) => m[1]);
-}
-
-/** Posts live at src/content/posts/<lang>/<slug>.mdx (see src/content.config.ts). */
-function readPosts(): Post[] {
-  return LANGS.flatMap((lang) => {
-    const dir = join(POSTS_DIR, lang);
-    if (!existsSync(dir)) return [];
-    return readdirSync(dir)
-      .filter((f) => f.endsWith('.mdx'))
-      .map((file) => {
-        const raw = readFileSync(join(dir, file), 'utf-8');
-        if (getFrontmatterField(raw, 'draft') === 'true') return null;
-        const slug = file.replace(/\.mdx$/, '');
-        const title = getFrontmatterField(raw, 'title') ?? slug;
-        const description = getFrontmatterField(raw, 'description') ?? undefined;
-        const tags = getFrontmatterTags(raw);
-        return { lang, slug, title, description, tags };
-      })
-      .filter((p): p is Post => p !== null);
-  });
-}
-
-function listCards(posts: Post[]): Card[] {
+function listCards(posts: PostFile[]): Card[] {
   const postCards: Card[] = posts.map((post) => {
     const params: Record<string, string> = { title: post.title, author: 'Gabriel Franco' };
     if (post.description) params.description = post.description;
@@ -118,7 +79,7 @@ async function main() {
   }
 
   const force = process.argv.includes('--force');
-  const cards = listCards(readPosts());
+  const cards = listCards(readPostFiles().filter((post) => !post.draft));
   console.log(`Found ${cards.length} cards to process\n`);
 
   let generated = 0;
