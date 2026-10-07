@@ -23,4 +23,19 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { posts };
+// The about page, one file per language: src/content/about/<lang>.mdx. The
+// entry id is the language; the URL is /<lang>/<slug>.
+const about = defineCollection({
+  loader: glob({
+    pattern: '*.mdx',
+    base: './src/content/about',
+    generateId: ({ entry }) => entry.replace(/\.mdx$/, ''),
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    slug: z.string(),
+  }),
+});
+
+export const collections = { posts, about };

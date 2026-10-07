@@ -10,15 +10,16 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { LANGS, pageMeta, tagPageMeta, type Lang, type PageKey } from '../src/lib/i18n.ts';
-import { readPostFiles, type PostFile } from '../src/lib/post-files.ts';
-import { pageCardPath, postCardPath, tagCardPath } from '../src/lib/social-cards.ts';
+import { readAboutFiles, readPostFiles, type PostFile } from '../src/lib/post-files.ts';
+import { aboutCardPath, pageCardPath, postCardPath, tagCardPath } from '../src/lib/social-cards.ts';
 
 const BASE_URL = process.env.SOCIAL_CARD_BASE_URL ?? 'https://gabeefran.co';
 const CF_API = 'https://api.cloudflare.com/client/v4/accounts';
 // 404.html is prerendered once, in English (see src/pages/404.astro).
+// The about page is missing here: it comes from src/content/about/<lang>.mdx.
 const LANG_PAGES: Record<Lang, PageKey[]> = {
-  en: ['home', 'posts', 'about', '404'],
-  pt: ['home', 'posts', 'about'],
+  en: ['home', 'posts', '404'],
+  pt: ['home', 'posts'],
 };
 
 interface Card {
@@ -38,9 +39,12 @@ function listCards(posts: PostFile[]): Card[] {
 
   const pageCards: Card[] = LANGS.flatMap((lang) => {
     const pages = LANG_PAGES[lang].map((key) => ({ path: pageCardPath(lang, key), meta: pageMeta(lang, key) }));
+    const aboutPages = readAboutFiles()
+      .filter((about) => about.lang === lang)
+      .map(({ slug, title, description }) => ({ path: aboutCardPath(lang, slug), meta: { title, description } }));
     const tags = [...new Set(posts.filter((p) => p.lang === lang).flatMap((p) => p.tags))].sort();
     const tagPages = tags.map((tag) => ({ path: tagCardPath(lang, tag), meta: tagPageMeta(lang, tag) }));
-    return [...pages, ...tagPages].map(({ path, meta }) => ({
+    return [...pages, ...aboutPages, ...tagPages].map(({ path, meta }) => ({
       path,
       route: '/page-card' as const,
       params: { title: meta.title, description: meta.description },

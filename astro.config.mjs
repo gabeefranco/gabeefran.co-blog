@@ -39,7 +39,11 @@ const DRAFT_PATHS = readPostFiles()
 export default defineConfig({
   site: 'https://gabeefran.co',
 
-  redirects: Object.fromEntries(LEGACY_EN_PATHS.map((path) => [path, path === '/' ? '/en' : `/en${path}`])),
+  redirects: {
+    ...Object.fromEntries(LEGACY_EN_PATHS.map((path) => [path, path === '/' ? '/en' : `/en${path}`])),
+    // The Portuguese about page used to share the English slug.
+    '/pt/about': '/pt/sobre',
+  },
 
   integrations: [react(), mdx(), sitemap({ filter: (page) => !DRAFT_PATHS.some((path) => page.endsWith(path)) })],
 

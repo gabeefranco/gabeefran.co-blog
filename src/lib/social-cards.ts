@@ -11,6 +11,11 @@ export function pageCardPath(lang: Lang, page: PageKey): string {
   return `/social-cards/${lang}/pages/${page}.png`;
 }
 
+/** Named after the slug, like the page itself (/pt/sobre -> pt/pages/sobre.png). */
+export function aboutCardPath(lang: Lang, slug: string): string {
+  return `/social-cards/${lang}/pages/${slug}.png`;
+}
+
 export function tagCardPath(lang: Lang, tag: string): string {
   return `/social-cards/${lang}/tags/${tag}.png`;
 }

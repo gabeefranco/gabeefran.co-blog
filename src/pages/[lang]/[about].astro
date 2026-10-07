@@ -1,0 +1,39 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LANGS, useTranslations, type Lang } from '../../lib/i18n';
+import { getAbout, getAboutAlternates } from '../../lib/about';
+import { aboutCardPath } from '../../lib/social-cards';
+
+// The slug comes from src/content/about/<lang>.mdx, so each language names its own route.
+export async function getStaticPaths() {
+  return Promise.all(
+    LANGS.map(async (lang) => {
+      const page = await getAbout(lang);
+      return { params: { lang, about: page.data.slug }, props: { page } };
+    }),
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const { page } = Astro.props;
+const { Content } = await render(page);
+const alternates = await getAboutAlternates();
+---
+
+<BaseLayout
+  title={`${page.data.title} — ${t('site.name')}`}
+  description={page.data.description}
+  lang={lang}
+  image={aboutCardPath(lang, page.data.slug)}
+  alternates={alternates}
+>
+  <section class="mx-10 mt-10 font-mono">
+    <h1 class="text-3xl font-bold tracking-tight text-text sm:text-4xl">{page.data.title}</h1>
+
+    <div class="prose prose-neutral mt-6 max-w-none prose-headings:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline dark:prose-invert">
+      <Content />
+    </div>
+  </section>
+</BaseLayout>

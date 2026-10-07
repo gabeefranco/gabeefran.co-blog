@@ -50,3 +50,22 @@ export function readPostFiles(): PostFile[] {
       });
   });
 }
+
+export interface AboutFile {
+  lang: Lang;
+  slug: string;
+  title: string;
+  description: string;
+}
+
+/** The about page lives at src/content/about/<lang>.mdx (see src/content.config.ts). */
+export function readAboutFiles(): AboutFile[] {
+  return LANGS.flatMap((lang) => {
+    const file = join('src/content/about', `${lang}.mdx`);
+    if (!existsSync(file)) return [];
+    const raw = readFileSync(file, 'utf-8');
+    const slug = getFrontmatterField(raw, 'slug');
+    if (!slug) throw new Error(`${file} is missing a \`slug\` in its frontmatter`);
+    return [{ lang, slug, title: getFrontmatterField(raw, 'title') ?? slug, description: getFrontmatterField(raw, 'description') ?? '' }];
+  });
+}
